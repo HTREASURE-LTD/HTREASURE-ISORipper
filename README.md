@@ -18,7 +18,8 @@ HT ISO Ripper reads data CDs and DVDs sector by sector, through documented Windo
 | SHA-256, structural verification, full source-to-image verification | Done |
 | Read speed control, tray lock, eject | Done (where the drive supports it) |
 | Logging with retention | Done |
-| Unit tests (mock disc) | 51 passing |
+| .NET 4.8 main build + .NET 4.6.1 compatibility build (Windows 8.0) | Done |
+| Unit tests (mock disc) | 51 passing on both builds |
 | Real-drive tests | Written; **not yet run** (no drive on the build machine) |
 | Compression, ISO Manager, History, BIN/CUE, multisession | Stage 3 |
 | Installer, accessibility pass, compatibility sign-off | Stage 4 |
@@ -33,7 +34,7 @@ dotnet build HTISORipper.sln -c Release
 dotnet test HTISORipper.sln
 ```
 
-Run `src\HTISORipper.UI\bin\Release\net48\HTISORipper.exe`.
+Run `src\HTISORipper.UI\bin\Release\net48\HTISORipper.exe` on Windows 7 SP1/8.1/10/11, or the `net461` build on Windows 8.0.
 
 ## Documentation
 

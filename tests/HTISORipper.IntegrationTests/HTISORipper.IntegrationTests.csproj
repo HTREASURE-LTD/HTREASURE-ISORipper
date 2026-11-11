@@ -2,6 +2,7 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <TargetFrameworks>net48</TargetFrameworks>
     <RootNamespace>HTISORipper.IntegrationTests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>

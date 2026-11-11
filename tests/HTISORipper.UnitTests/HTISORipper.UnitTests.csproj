@@ -2,6 +2,8 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <!-- net462 runs the tests against the net461 libraries (Microsoft.NET.Test.Sdk needs 4.6.2+); net48 against the main build. -->
+    <TargetFrameworks>net462;net48</TargetFrameworks>
     <RootNamespace>HTISORipper.UnitTests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>

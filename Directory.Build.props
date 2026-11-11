@@ -1,7 +1,9 @@
 <Project>
   <!-- Shared build settings for every HT ISO Ripper project. -->
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <!-- net48: main build (Windows 7 SP1, 8.1, 10, 11; per-monitor DPI).
+         net461: compatibility build for Windows 8.0, where .NET Framework 4.8 cannot be installed. -->
+    <TargetFrameworks>net461;net48</TargetFrameworks>
     <!-- C# 7.3 is the default for .NET Framework and keeps the solution buildable in VS 2019 and VS 2022. -->
     <LangVersion>7.3</LangVersion>
     <Platforms>AnyCPU;x86;x64</Platforms>

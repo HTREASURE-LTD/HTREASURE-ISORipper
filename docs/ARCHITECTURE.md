@@ -41,7 +41,7 @@ An ISO file is a flat sequence of 2048-byte user-data sectors. Anything that is 
 
 | Component | Choice | Reason |
 |---|---|---|
-| Runtime | .NET Framework 4.8 | Ships with Windows 10 1903+ and 11; installs on Windows 7 SP1, 8.1. Windows 8 (non-.1) supports .NET 4.6.x at most, so it is **not** covered; see COMPATIBILITY.md. |
+| Runtime | .NET Framework 4.8 (main) + 4.6.1 (compatibility) | 4.8 ships with Windows 10 1903+ and 11 and installs on Windows 7 SP1 and 8.1. Windows 8.0 cannot install 4.8, so the same source is also built for 4.6.1. See COMPATIBILITY.md. |
 | UI | Windows Forms | Mature, works identically on Win7–11, per-monitor DPI V2 support from .NET 4.7. |
 | Language | C# 7.3 | Default for .NET Framework, so it builds in VS 2019 and VS 2022. |
 | Device access | Win32 P/Invoke (kernel32) | No third-party code anywhere near the hardware. |

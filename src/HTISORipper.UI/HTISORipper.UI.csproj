@@ -11,6 +11,10 @@
     <Prefer32Bit>false</Prefer32Bit>
     <StartupObject>HTISORipper.UI.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
+    <!-- 4.6.1 does not know the WinForms DPI configuration section; it gets its own config file. -->
+    <AppConfig>App.net461.config</AppConfig>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\HTISORipper.Core\HTISORipper.Core.csproj" />
     <ProjectReference Include="..\HTISORipper.Logging\HTISORipper.Logging.csproj" />

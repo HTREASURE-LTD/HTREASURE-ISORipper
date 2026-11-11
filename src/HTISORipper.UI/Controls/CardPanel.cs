@@ -50,7 +50,12 @@ namespace HTISORipper.UI.Controls
 
         private int LogicalToDeviceUnitsSafe(int value)
         {
+#if NET461
+            // Control.DeviceDpi needs .NET 4.7; the 4.6.1 build is system-DPI aware, so the screen DPI is correct.
+            using (Graphics g = CreateGraphics()) return (int)(value * g.DpiX / 96f);
+#else
             return (int)(value * DeviceDpi / 96f);
+#endif
         }
 
         internal static GraphicsPath RoundRect(Rectangle r, int radius)

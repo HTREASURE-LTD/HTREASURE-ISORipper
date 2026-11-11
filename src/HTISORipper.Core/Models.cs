@@ -12,6 +12,11 @@ namespace HTISORipper.Core
         public const string Copyright = "© 2026 HTREASURE LTD";
         public const string Version = "1.0.0";
         public const string Stage = "Stage 1 build";
+#if NET461
+        public const string RuntimeBuild = ".NET Framework 4.6.1 compatibility build";
+#else
+        public const string RuntimeBuild = ".NET Framework 4.8 build";
+#endif
     }
 
     public enum DriveMediaState

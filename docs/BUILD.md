@@ -35,7 +35,14 @@ dotnet build HTISORipper.sln -c Release -p:Platform=x64
 dotnet test HTISORipper.sln -c Release
 ```
 
-Output: `src\HTISORipper.UI\bin\<Platform>\Release\net48\HTISORipper.exe`, plus the five `HTISORipper.*.dll` libraries and `HTISORipper.exe.config`. All of these files must be distributed together.
+Each command builds both target frameworks:
+
+* `src\HTISORipper.UI\bin\<Platform>\Release\net48\`: main build for Windows 7 SP1, 8.1, 10 and 11
+* `src\HTISORipper.UI\bin\<Platform>\Release\net461\`: compatibility build for Windows 8.0
+
+Each folder holds `HTISORipper.exe`, `HTISORipper.exe.config` and the five `HTISORipper.*.dll` libraries, which must be distributed together. Don't mix files from the two folders.
+
+To build only one framework, add `-f net48` or `-f net461`. `dotnet test` runs the unit tests twice: on net48, and on net462 against the net461 libraries.
 
 ## Replacing the placeholder branding
 
@@ -45,7 +52,7 @@ Replace `assets\branding\ht_logo.png` (256×256), `assets\branding\ht_logo_64.pn
 
 1. Bump `Version`, `AssemblyVersion` and `FileVersion` in `Directory.Build.props` and `AppInfo.Version`.
 2. `dotnet test` must be green and the hardware matrix in TESTING.md signed off.
-3. Build `Release|x86` and `Release|x64`.
+3. Build `Release|x86` and `Release|x64` (each produces net48 and net461).
 4. Authenticode-sign `HTISORipper.exe` and the DLLs (`signtool sign /fd SHA256 /tr <timestamp-url> /td SHA256`).
 5. Build the installers (WiX, see `installer/README.md`) and sign them.
 6. Publish SHA-256 checksums of the installers.

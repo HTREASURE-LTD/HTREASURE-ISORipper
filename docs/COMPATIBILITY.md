@@ -1,14 +1,25 @@
 # Windows Compatibility Notes
 
-## Runtime
+## Runtime and builds
 
-| OS | .NET Framework 4.8 | Status |
-|---|---|---|
-| Windows 7 SP1 x86/x64 | Installable (offline installer `ndp48-x86-x64-allos-enu.exe`) | Supported. Needs SP1 and SHA-2 code-signing update KB4474419 for signed installers. |
-| Windows 8 (8.0) x86/x64 | **Not supported by Microsoft** (last is .NET 4.6.1) | **Not covered by a 4.8 build.** Free upgrade to 8.1 required, or a separate 4.6.x build (decision pending). |
-| Windows 8.1 x86/x64 | Installable | Supported |
-| Windows 10 x86/x64 | Built in from 1903; installable on older builds | Supported |
-| Windows 11 x64 | Built in | Supported |
+HT ISO Ripper is built twice from the same source:
+
+| Build | Folder | For | Differences |
+|---|---|---|---|
+| **.NET Framework 4.8** (main) | `bin\<Platform>\Release\net48` | Windows 7 SP1, 8.1, 10, 11 | Per-monitor DPI V2 on Windows 10 1703+ |
+| **.NET Framework 4.6.1** (compatibility) | `bin\<Platform>\Release\net461` | **Windows 8.0**, or any PC that cannot install 4.8 | System-DPI aware only: sharp at the main monitor's scaling, bitmap-scaled on monitors with other scaling. All imaging, verification and UI features are identical. |
+
+| OS | .NET 4.8 | .NET 4.6.1 | Build to ship |
+|---|---|---|---|
+| Windows 7 SP1 x86/x64 | Installable (`ndp48-x86-x64-allos-enu.exe`) | Installable | 4.8 |
+| Windows 8 (8.0) x86/x64 | **Cannot be installed** | Installable (`NDP461-KB3102436-x86-x64-AllOS-ENU.exe`) | **4.6.1** |
+| Windows 8.1 x86/x64 | Installable | Installable | 4.8 |
+| Windows 10 x86/x64 | Built in from 1903 | Runs (4.8 is backwards compatible) | 4.8 |
+| Windows 11 x64 | Built in | Runs | 4.8 |
+
+For signed installers on Windows 7, the SHA-2 code-signing update KB4474419 is required.
+
+How the 4.6.1 build differs in source: `App.net461.config` omits the WinForms DPI section (4.6.1 rejects it as unknown), and `CardPanel` reads DPI from `Graphics.DpiX` instead of `Control.DeviceDpi` (`#if NET461`). The compiler builds it against the 4.6.1 reference assemblies, so any newer API is a build error.
 
 ## Win32 APIs used and their minimum versions
 
@@ -48,9 +59,10 @@ No Windows 10/11-only API is used. Where a newer feature exists (per-monitor DPI
 
 | Check | Result |
 |---|---|
-| Release build x86 / x64 / AnyCPU | Builds, 0 warnings |
-| x86 exe runs as a 32-bit process on Windows 11 x64 | Yes |
-| UI starts, no-drive state on Windows 11 | Yes |
-| Unit tests (mock device) | 51/51 pass |
+| Release build x86 / x64 / AnyCPU, net48 and net461 | Builds, 0 warnings |
+| x86 exe runs as a 32-bit process on Windows 11 x64 (net48 and net461) | Yes |
+| UI starts, no-drive state on Windows 11 (net48 and net461) | Yes |
+| Unit tests (mock device) | 51/51 pass on net48, and 51/51 on net462 running against the net461 libraries |
+| Windows 8.0 | **Not yet tested.** Needs a Windows 8.0 VM with .NET 4.6.1. |
 | Real optical hardware | **Not yet tested.** The build machine has no optical drive. |
 | Windows 7 / 8.1 / 10 | **Not yet tested.** Needs VMs or physical machines (see TESTING.md). |
