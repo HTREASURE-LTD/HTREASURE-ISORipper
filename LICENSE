@@ -1,0 +1,12 @@
+Copyright (c) 2026 HTREASURE LTD. All rights reserved.
+
+HT ISO Ripper is proprietary software of HTREASURE LTD.
+
+PLACEHOLDER: replace this file with the licence terms approved by HTREASURE LTD before
+distribution. The installer's licence agreement page (Stage 4) will display that text.
+
+Third-party components used only at build/test time (not distributed):
+- xUnit.net (Apache License 2.0)
+- Xunit.SkippableFact (Microsoft Public License)
+- Microsoft.NET.Test.Sdk (MIT)
+- Microsoft.NETFramework.ReferenceAssemblies (MIT)

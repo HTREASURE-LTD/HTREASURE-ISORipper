@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>HTISORipper</AssemblyName>
+    <RootNamespace>HTISORipper.UI</RootNamespace>
+    <ApplicationIcon>..\..\assets\icons\htisoripper.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- AnyCPU without Prefer32Bit runs as a native 64-bit process on x64 Windows and 32-bit on x86 Windows.
+         Platform-specific x86/x64 builds are produced with -p:Platform=x86 or -p:Platform=x64. -->
+    <Prefer32Bit>false</Prefer32Bit>
+    <StartupObject>HTISORipper.UI.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HTISORipper.Core\HTISORipper.Core.csproj" />
+    <ProjectReference Include="..\HTISORipper.Logging\HTISORipper.Logging.csproj" />
+    <ProjectReference Include="..\HTISORipper.DiscEngine\HTISORipper.DiscEngine.csproj" />
+    <ProjectReference Include="..\HTISORipper.Imaging\HTISORipper.Imaging.csproj" />
+    <ProjectReference Include="..\HTISORipper.Verification\HTISORipper.Verification.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="HTISORipper.UnitTests" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\assets\branding\ht_logo.png" LogicalName="HTISORipper.UI.ht_logo.png" />
+    <EmbeddedResource Include="..\..\assets\branding\ht_logo_64.png" LogicalName="HTISORipper.UI.ht_logo_64.png" />
+    <EmbeddedResource Include="..\..\assets\icons\htisoripper.ico" LogicalName="HTISORipper.UI.htisoripper.ico" />
+  </ItemGroup>
+</Project>

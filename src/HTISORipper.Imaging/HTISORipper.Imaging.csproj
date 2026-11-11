@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>HTISORipper.Imaging</RootNamespace>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HTISORipper.Core\HTISORipper.Core.csproj" />
+    <ProjectReference Include="..\HTISORipper.Logging\HTISORipper.Logging.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="HTISORipper.UnitTests" />
+  </ItemGroup>
+</Project>

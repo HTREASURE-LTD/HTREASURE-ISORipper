@@ -1,0 +1,29 @@
+<Project>
+  <!-- Shared build settings for every HT ISO Ripper project. -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <!-- C# 7.3 is the default for .NET Framework and keeps the solution buildable in VS 2019 and VS 2022. -->
+    <LangVersion>7.3</LangVersion>
+    <Platforms>AnyCPU;x86;x64</Platforms>
+    <Deterministic>true</Deterministic>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+    <Company>HTREASURE LTD</Company>
+    <Product>HT ISO Ripper</Product>
+    <Authors>HTREASURE LTD</Authors>
+    <Copyright>© 2026 HTREASURE LTD</Copyright>
+    <Description>Professional CD/DVD to ISO Imaging and Backup Utility</Description>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0-stage1</InformationalVersion>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Lets the solution build on machines without the .NET Framework 4.8 targeting pack installed. -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+</Project>
