@@ -3,6 +3,7 @@
 ## 1.0.0-stage1 – 2026-11-11
 
 ### Added
+- Stage 4: smart Inno Setup installer (online and offline) with Windows version, architecture and .NET detection, automatic net48/net461 and x86/x64 selection, consented download of Microsoft .NET from download.microsoft.com with SHA-256 and Authenticode verification, restart and resume, upgrade and uninstall handling. Pinned prerequisite manifest, 29 installer tests, release pipeline (package verification, portable ZIPs, SHA256SUMS, release manifest, signing hooks) and CI/release GitHub workflows.
 - .NET Framework 4.6.1 compatibility build alongside the 4.8 build, so Windows 8.0 is supported; unit tests run against both.
 - Visual Studio solution (.NET Framework 4.8, WinForms) with Core, Logging, DiscEngine, Imaging, Verification and UI projects.
 - Read-only optical-drive engine using documented IOCTLs: drive enumeration, media state, MMC profile, TOC/sessions, capacity, DVD copy-protection detection, read speed, tray lock, eject.

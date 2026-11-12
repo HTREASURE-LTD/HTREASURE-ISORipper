@@ -64,5 +64,8 @@ No Windows 10/11-only API is used. Where a newer feature exists (per-monitor DPI
 | UI starts, no-drive state on Windows 11 (net48 and net461) | Yes |
 | Unit tests (mock device) | 51/51 pass on net48, and 51/51 on net462 running against the net461 libraries |
 | Windows 8.0 | **Not yet tested.** Needs a Windows 8.0 VM with .NET 4.6.1. |
+| Installer decision logic (all supported Windows versions, simulated) | 29/29 installer tests pass |
+| Installer wizard on simulated Windows 8 x86 (preview build) | Pages and consent gate verified |
+| Real installation and uninstallation | **Not yet tested** (needs UAC approval or VMs; see WINDOWS-TEST-MATRIX.md) |
 | Real optical hardware | **Not yet tested.** The build machine has no optical drive. |
 | Windows 7 / 8.1 / 10 | **Not yet tested.** Needs VMs or physical machines (see TESTING.md). |

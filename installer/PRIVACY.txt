@@ -1,0 +1,16 @@
+HT ISO Ripper - Privacy information
+
+HT ISO Ripper does not collect, transmit or share personal data.
+
+- No telemetry, analytics, advertising or tracking of any kind.
+- The application does not connect to the internet. Disc imaging works completely offline.
+- Settings are stored only on this computer:
+    %APPDATA%\HTREASURE LTD\HT ISO Ripper\settings.xml
+- Log files are stored only on this computer and are deleted automatically after the retention period you choose:
+    %LOCALAPPDATA%\HTREASURE LTD\HT ISO Ripper\Logs
+- Disc images are saved only where you choose. Uninstalling HT ISO Ripper never deletes your disc images.
+
+Setup itself connects to the internet only if this computer is missing the Microsoft .NET Framework, and only after
+you agree. It then downloads Microsoft's official installer directly from download.microsoft.com over HTTPS, checks
+its SHA-256 fingerprint and Microsoft digital signature, and runs it. No information about you or this computer is
+sent to HTREASURE LTD.

@@ -65,10 +65,12 @@ src/
 tests/
   HTISORipper.UnitTests        51 tests using an in-memory mock disc
   HTISORipper.IntegrationTests Real-drive tests, skipped unless HTISO_TEST_DRIVE is set
+  HTISORipper.InstallerTests   Installer decision/verification tests (compiled Inno harness)
+  installer/                   DecisionHarness.iss
 assets/branding, assets/icons  Placeholder logo + icon (replaceable)
 scripts/                       generate-placeholder-branding.ps1
 docs/                          This file, BUILD, COMPATIBILITY, TESTING, USER_MANUAL
-installer/                     Stage 4
+installer/                     Inno Setup smart installer (see INSTALLER-DESIGN.md)
 ```
 
 Dependency direction: `UI → Imaging, Verification, DiscEngine → Core → Logging`. The imaging and verification engines only know the `ISectorSource` interface. The real implementation is `OpticalSectorSource`; tests use `MockSectorSource`. Hardware-independent logic is fully tested, and the shipped code path performs real disc reads.

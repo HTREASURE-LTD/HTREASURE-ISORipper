@@ -1,0 +1,52 @@
+name: Release build
+
+# Builds release artifacts only. It never creates or publishes a GitHub Release:
+# publishing is a separate, explicitly approved manual step (docs/RELEASE-CHECKLIST.md).
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to build
+        required: true
+        default: 1.0.0
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: windows-2022
+    env:
+      HAS_CERT: ${{ secrets.HT_SIGN_PFX_BASE64 != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+        shell: pwsh
+
+      - name: Import code-signing certificate (only when the secret is configured)
+        if: ${{ env.HAS_CERT == 'true' }}
+        shell: pwsh
+        env:
+          PFX_BASE64: ${{ secrets.HT_SIGN_PFX_BASE64 }}
+          PFX_PASSWORD: ${{ secrets.HT_SIGN_PFX_PASSWORD }}
+        run: |
+          $pfx = Join-Path $env:RUNNER_TEMP 'htsign.pfx'
+          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:PFX_BASE64))
+          $cert = Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password (ConvertTo-SecureString $env:PFX_PASSWORD -AsPlainText -Force)
+          Remove-Item $pfx
+          "HT_SIGN_THUMBPRINT=$($cert.Thumbprint)" >> $env:GITHUB_ENV
+
+      - name: Build, test, verify prerequisites, package, checksum
+        shell: pwsh
+        env:
+          ISCC_PATH: C:\Program Files (x86)\Inno Setup 6\ISCC.exe
+          HT_TIMESTAMP_URL: ${{ vars.HT_TIMESTAMP_URL }}
+        run: ./scripts/build-release.ps1 -Version '${{ inputs.version }}'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HT-ISO-Ripper-${{ inputs.version }}
+          path: release/v${{ inputs.version }}
+          if-no-files-found: error

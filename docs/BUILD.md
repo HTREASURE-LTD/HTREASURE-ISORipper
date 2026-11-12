@@ -48,11 +48,22 @@ To build only one framework, add `-f net48` or `-f net461`. `dotnet test` runs t
 
 Replace `assets\branding\ht_logo.png` (256×256), `assets\branding\ht_logo_64.png` (64×64) and `assets\icons\htisoripper.ico` with official artwork of the same names, then rebuild. To regenerate the placeholders, run `scripts\generate-placeholder-branding.ps1`.
 
-## Release packaging (Stage 4 outline)
+## Installers and release packaging
 
-1. Bump `Version`, `AssemblyVersion` and `FileVersion` in `Directory.Build.props` and `AppInfo.Version`.
-2. `dotnet test` must be green and the hardware matrix in TESTING.md signed off.
-3. Build `Release|x86` and `Release|x64` (each produces net48 and net461).
-4. Authenticode-sign `HTISORipper.exe` and the DLLs (`signtool sign /fd SHA256 /tr <timestamp-url> /td SHA256`).
-5. Build the installers (WiX, see `installer/README.md`) and sign them.
-6. Publish SHA-256 checksums of the installers.
+Also needs **Inno Setup 6.3+** (built and tested with 6.7), from jrsoftware.org or `winget install JRSoftware.InnoSetup`.
+
+```bash
+powershell -File scripts/build-release.ps1
+```
+
+The script runs all tests, builds the four configurations, verifies each package (exact files, all managed code, correct runtime config), verifies the pinned Microsoft prerequisites, signs (if configured), compiles the online and offline installers, and writes portable ZIPs, documentation, `SHA256SUMS.txt` and `release-manifest.json` to `release\v1.0.0\`.
+
+The first time on a new machine, the offline installer needs the Microsoft packages in `installer\redist`. Verify mode downloads them from the pinned URLs and checks them:
+
+```bash
+powershell -File scripts/pin-prerequisites.ps1 -Mode Verify
+```
+
+Signing: see docs/COMMERCIAL-RELEASE.md. Checklist: docs/RELEASE-CHECKLIST.md.
+
+GitHub: `.github/workflows/ci.yml` builds and tests every push and pull request. `release.yml` (manual) produces the release as a workflow artifact and never publishes a GitHub Release.

@@ -1,10 +1,10 @@
 # HT ISO Ripper
 
-**Professional CD/DVD to ISO Imaging and Backup Utility** · HTREASURE LTD · Version 1.0.0 (Stage 1)
+**Professional CD/DVD to ISO Imaging and Backup Utility** · HTREASURE LTD · Version 1.0.0 (Stages 1 and 4; Stage 3 pending)
 
 HT ISO Ripper reads data CDs and DVDs sector by sector, through documented Windows device interfaces, into standard ISO images. It verifies each image against the disc and never presents a damaged or partial image as a good backup.
 
-## Stage 1 status
+## Status
 
 | Feature | Status |
 |---|---|
@@ -21,8 +21,12 @@ HT ISO Ripper reads data CDs and DVDs sector by sector, through documented Windo
 | .NET 4.8 main build + .NET 4.6.1 compatibility build (Windows 8.0) | Done |
 | Unit tests (mock disc) | 51 passing on both builds |
 | Real-drive tests | Written; **not yet run** (no drive on the build machine) |
-| Compression, ISO Manager, History, BIN/CUE, multisession | Stage 3 |
-| Installer, accessibility pass, compatibility sign-off | Stage 4 |
+| Smart installer (online + offline): OS, architecture and .NET detection, automatic build selection, consented and verified .NET download, restart resume | Done (Stage 4) |
+| Installer decision and verification tests | 29 passing |
+| Release pipeline: package verification, checksums, manifest, signing hooks, GitHub workflows | Done |
+| Code signing | **Blocked:** needs an HTREASURE LTD certificate |
+| Installer and app on Windows 7 / 8 / 8.1 / 10 | **Not yet tested** (no VMs) |
+| Compression, ISO Manager, History, BIN/CUE, multisession | **Stage 3, not started** |
 
 ## Quick start
 
@@ -36,6 +40,12 @@ dotnet test HTISORipper.sln
 
 Run `src\HTISORipper.UI\bin\Release\net48\HTISORipper.exe` on Windows 7 SP1/8.1/10/11, or the `net461` build on Windows 8.0.
 
+Release (installers, portable ZIPs, checksums):
+
+```bash
+powershell -File scripts/build-release.ps1
+```
+
 ## Documentation
 
 * [Architecture and technical decisions](docs/ARCHITECTURE.md): disc-access evaluation, ISO limitations, libraries, design
@@ -43,6 +53,8 @@ Run `src\HTISORipper.UI\bin\Release\net48\HTISORipper.exe` on Windows 7 SP1/8.1/
 * [Windows compatibility notes](docs/COMPATIBILITY.md)
 * [Test plan](docs/TESTING.md), including the hardware acceptance matrix
 * [User manual](docs/USER_MANUAL.md)
+* [Installer design](docs/INSTALLER-DESIGN.md), [Prerequisites](docs/PREREQUISITES.md), [Offline installation](docs/OFFLINE-INSTALLATION.md)
+* [Windows test matrix](docs/WINDOWS-TEST-MATRIX.md), [Release checklist](docs/RELEASE-CHECKLIST.md), [Commercial release items](docs/COMMERCIAL-RELEASE.md)
 
 ## Principles
 

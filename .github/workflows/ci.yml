@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Inno Setup (installer decision tests)
+        run: choco install innosetup -y --no-progress
+        shell: pwsh
+
+      - name: Build net48 + net461, x86 + x64
+        shell: pwsh
+        run: |
+          foreach ($p in 'x86','x64') { dotnet build HTISORipper.sln -c Release -p:Platform=$p -nologo; if ($LASTEXITCODE) { exit 1 } }
+
+      - name: Test (unit tests on net48 and net462, installer decision tests)
+        shell: pwsh
+        env:
+          ISCC_PATH: C:\Program Files (x86)\Inno Setup 6\ISCC.exe
+        run: dotnet test HTISORipper.sln -c Release -nologo --logger "trx" --results-directory TestResults
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: TestResults

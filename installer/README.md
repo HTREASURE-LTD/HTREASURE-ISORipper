@@ -1,15 +1,34 @@
-# Installer (Stage 4 – not started)
+# HT ISO Ripper Installer
 
-Planned: WiX Toolset v4 MSI per architecture and runtime:
-- HTISORipper-1.0.0-x86.msi / -x64.msi from the net48 build (Windows 7 SP1, 8.1, 10, 11), detecting .NET 4.8 (Release DWORD >= 528040)
-- HTISORipper-1.0.0-win8-x86.msi / -win8-x64.msi from the net461 build (Windows 8.0), detecting .NET 4.6.1 (Release DWORD >= 394254)
-A bootstrapper may pick the right package by OS version.
+Inno Setup 6.3+ script (built and tested with 6.7) that produces both customer installers:
 
-Requirements carried from the specification:
-- HTREASURE LTD branding (banner/dialog bitmaps from assets/branding), licence agreement page (text from LICENSE once approved)
-- Install directory selection (default %ProgramFiles%\HTREASURE LTD\HT ISO Ripper)
-- Desktop shortcut (optional) and Start Menu shortcut using assets/icons/htisoripper.ico
-- Proper uninstaller (Programs and Features), version information, Authenticode signing of MSI and binaries
-- Per-machine install; the application itself runs without elevation
+| Output | Command |
+|---|---|
+| `release\v1.0.0\online\HT-ISO-Ripper-Setup-1.0.0.exe` | `ISCC installer\HTISORipper.iss` |
+| `release\v1.0.0\offline\HT-ISO-Ripper-Offline-Setup-1.0.0.exe` | `ISCC /DOffline=1 installer\HTISORipper.iss` |
 
-No installer configuration is included in Stage 1, so none is presented as working.
+Normally run `scripts\build-release.ps1`, which builds and verifies the application first.
+
+Both installers detect Windows version, architecture and .NET Framework, install exactly one of the four application builds (net48/net461 × x86/x64), and install Microsoft .NET Framework only if it is missing and the user agrees.
+
+| File | Purpose |
+|---|---|
+| `HTISORipper.iss` | Main script |
+| `decision.iss` | Detection and decision logic (shared with `tests\installer\DecisionHarness.iss`) |
+| `prerequisites.ini` | Pinned Microsoft packages: URL, size, SHA-256, signer |
+| `branding.iss` | Publisher details (fill in when supplied) |
+| `PRIVACY.txt` | Privacy page |
+| `images\` | Wizard bitmaps |
+| `redist\` | Downloaded Microsoft packages for the offline build (git-ignored) |
+
+Developer preview of the wizard pages, which needs no admin rights and never ships, with optional simulation of another OS:
+
+```bash
+ISCC /DPreview=1 installer\HTISORipper.iss
+```
+
+```bash
+HT-ISO-Ripper-Setup-1.0.0.exe /simmajor=6 /simminor=2 /simbuild=9200 /simx64=0 /simrelease=0
+```
+
+See docs\INSTALLER-DESIGN.md, docs\PREREQUISITES.md and docs\OFFLINE-INSTALLATION.md.
