@@ -118,6 +118,10 @@ foreach ($b in $builds) {
     New-Item -ItemType Directory $stage | Out-Null
     Get-ChildItem $b.Dir -File | Where-Object { $_.Extension -ne '.pdb' } | Copy-Item -Destination $stage
     Copy-Item LICENSE (Join-Path $stage 'LICENSE.txt'); Copy-Item installer\PRIVACY.txt $stage
+    # Documents opened from the Help menu (same layout as the installed program).
+    $docs = New-Item -ItemType Directory (Join-Path $stage 'Documentation')
+    Copy-Item docs\USER_MANUAL.md (Join-Path $docs 'USER-GUIDE.md')
+    Copy-Item docs\release\TROUBLESHOOTING.md, docs\release\RELEASE-NOTES.md, docs\release\INSTALLATION.md, docs\release\THIRD-PARTY-LICENSES.md $docs
     Compress-Archive -Path "$stage\*" -DestinationPath $zip
     Remove-Item -Recurse -Force $stage
 }

@@ -80,7 +80,7 @@ namespace HTISORipper.UI.Forms
             this.Controls.Add(this.logTextBox);
             this.Controls.Add(this.buttonPanel);
             this.Controls.Add(this.pathLabel);
-            this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.MinimizeBox = false;
             this.Name = "LogViewerForm";
             this.ShowInTaskbar = false;

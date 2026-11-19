@@ -39,10 +39,11 @@ namespace HTISORipper.InstallerTests
         public string Iscc { get; private set; }
         public string HarnessExe { get; private set; }
 
-        public Dictionary<string, string> Run(string args)
+        public Dictionary<string, string> Run(string args, string psModulePath = null)
         {
             string output = Path.Combine(Path.GetTempPath(), "htharness_" + Guid.NewGuid().ToString("N") + ".ini");
             var psi = new ProcessStartInfo(HarnessExe, "/VERYSILENT /SUPPRESSMSGBOXES /out=\"" + output + "\" " + args) { UseShellExecute = false };
+            if (psModulePath != null) psi.EnvironmentVariables["PSModulePath"] = psModulePath;
             using (var p = Process.Start(psi))
             {
                 if (!p.WaitForExit(60000)) { p.Kill(); throw new TimeoutException("Harness did not exit"); }
@@ -241,6 +242,27 @@ namespace HTISORipper.InstallerTests
             var r = Verify(file, Sha256(file));
             Assert.Equal("1", r["Verify.HashMatches"]);
             Assert.Equal("0", r["Verify.Signature"]);
+        }
+
+        [SkippableFact]
+        public void SignatureCheck_StillWorks_WhenSetupStartedFromPowerShell7()
+        {
+            // Regression: from a PowerShell 7 window, PSModulePath points at PowerShell 7 modules that Windows
+            // PowerShell 5.1 cannot load, which disabled the signature check (CI run 43129384954).
+            Skip.If(_h.HarnessExe == null, "Inno Setup (ISCC.exe) is not installed.");
+            string fake = Path.Combine(Path.GetTempPath(), "htfakeps7_" + Guid.NewGuid().ToString("N"));
+            string module = Path.Combine(fake, @"Microsoft.PowerShell.Security\7.0.0.0");
+            Directory.CreateDirectory(module);
+            File.WriteAllText(Path.Combine(module, "Microsoft.PowerShell.Security.psd1"),
+                "@{ ModuleVersion='7.0.0.0'; GUID='a94c8c7e-9810-47c0-b8af-65089c13a35a'; PowerShellVersion='7.0'; CompatiblePSEditions=@('Core'); RootModule='Microsoft.PowerShell.Security.dll' }");
+            try
+            {
+                string file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
+                string path = fake + ";" + Environment.GetEnvironmentVariable("PSModulePath");
+                var r = _h.Run("/verify=\"" + file + "\" /sha=" + Sha256(file) + " /org=\"Microsoft Corporation\"", path);
+                Assert.Equal("0", r["Verify.Signature"]);
+            }
+            finally { Directory.Delete(fake, true); }
         }
 
         [SkippableFact]

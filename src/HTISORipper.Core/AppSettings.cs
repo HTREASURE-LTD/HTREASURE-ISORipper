@@ -18,6 +18,7 @@ namespace HTISORipper.Core
             EjectAfterSuccess = false;
             LogRetentionDays = 30;
             ReadBlockSectors = 32;
+            Theme = AppTheme.System;
         }
 
         public string DefaultOutputDirectory { get; set; }
@@ -28,6 +29,7 @@ namespace HTISORipper.Core
         public bool EjectAfterSuccess { get; set; }
         public int LogRetentionDays { get; set; }
         public int ReadBlockSectors { get; set; }
+        public AppTheme Theme { get; set; }
 
         public void Normalise()
         {
@@ -41,6 +43,7 @@ namespace HTISORipper.Core
             if (!Enum.IsDefined(typeof(VerificationMode), VerificationMode)) VerificationMode = VerificationMode.FullSourceCompare;
             if (!Enum.IsDefined(typeof(ReadSpeedPreference), ReadSpeed)) ReadSpeed = ReadSpeedPreference.Automatic;
             if (!Enum.IsDefined(typeof(ErrorPolicy), ErrorPolicy)) ErrorPolicy = ErrorPolicy.AbortOnUnreadableSector;
+            if (!Enum.IsDefined(typeof(AppTheme), Theme)) Theme = AppTheme.System;
         }
     }
 

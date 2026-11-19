@@ -12,190 +12,261 @@ namespace HTISORipper.UI.Forms
 
         private void InitializeComponent()
         {
-            this.headerTable = new System.Windows.Forms.TableLayoutPanel();
-            this.logoPictureBox = new System.Windows.Forms.PictureBox();
-            this.titlePanel = new System.Windows.Forms.Panel();
-            this.subtitleLabel = new System.Windows.Forms.Label();
-            this.titleLabel = new System.Windows.Forms.Label();
-            this.statusPill = new HTISORipper.UI.Controls.StatusPill();
-            this.navPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.navDashboardButton = new System.Windows.Forms.Button();
-            this.navDiscInfoButton = new System.Windows.Forms.Button();
-            this.navSettingsButton = new System.Windows.Forms.Button();
-            this.navAboutButton = new System.Windows.Forms.Button();
-            this.separator = new System.Windows.Forms.Panel();
-            this.contentPanel = new System.Windows.Forms.Panel();
-            this.headerTable.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
-            this.titlePanel.SuspendLayout();
-            this.navPanel.SuspendLayout();
+            this.components = new System.ComponentModel.Container();
+            this.headerPanel = new System.Windows.Forms.Panel();
+            this.headerIcon = new System.Windows.Forms.PictureBox();
+            this.headerLabel = new System.Windows.Forms.Label();
+            this.subHeaderLabel = new System.Windows.Forms.Label();
+            this.websiteLinkLabel = new System.Windows.Forms.LinkLabel();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.startRippingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chooseOutputMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openOutputFolderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshDrivesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.discInfoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ejectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.viewLogMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openLogFolderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.userGuideMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.troubleshootingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.releaseNotesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.licenceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.noticesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusStripLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusRightLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.headerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.headerIcon)).BeginInit();
+            this.menuStrip.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             //
-            // headerTable
+            // headerPanel
             //
-            this.headerTable.BackColor = System.Drawing.Color.White;
-            this.headerTable.ColumnCount = 3;
-            this.headerTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
-            this.headerTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.headerTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize));
-            this.headerTable.Controls.Add(this.logoPictureBox, 0, 0);
-            this.headerTable.Controls.Add(this.titlePanel, 1, 0);
-            this.headerTable.Controls.Add(this.statusPill, 2, 0);
-            this.headerTable.Dock = System.Windows.Forms.DockStyle.Top;
-            this.headerTable.Location = new System.Drawing.Point(0, 0);
-            this.headerTable.Name = "headerTable";
-            this.headerTable.Padding = new System.Windows.Forms.Padding(16, 12, 16, 8);
-            this.headerTable.RowCount = 1;
-            this.headerTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.headerTable.Size = new System.Drawing.Size(800, 68);
-            this.headerTable.TabIndex = 0;
+            this.headerPanel.Controls.Add(this.headerIcon);
+            this.headerPanel.Controls.Add(this.headerLabel);
+            this.headerPanel.Controls.Add(this.subHeaderLabel);
+            this.headerPanel.Controls.Add(this.websiteLinkLabel);
+            this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.headerPanel.Location = new System.Drawing.Point(0, 0);
+            this.headerPanel.Name = "headerPanel";
+            this.headerPanel.Size = new System.Drawing.Size(784, 44);
+            this.headerPanel.TabIndex = 1;
+            this.headerPanel.Tag = "header";
             //
-            // logoPictureBox
+            // headerIcon
             //
-            this.logoPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.logoPictureBox.Location = new System.Drawing.Point(19, 14);
-            this.logoPictureBox.Name = "logoPictureBox";
-            this.logoPictureBox.Size = new System.Drawing.Size(40, 40);
-            this.logoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.logoPictureBox.TabStop = false;
+            this.headerIcon.Location = new System.Drawing.Point(16, 4);
+            this.headerIcon.Name = "headerIcon";
+            this.headerIcon.Size = new System.Drawing.Size(36, 36);
+            this.headerIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.headerIcon.TabIndex = 0;
+            this.headerIcon.TabStop = false;
             //
-            // titlePanel
+            // headerLabel
             //
-            this.titlePanel.Controls.Add(this.subtitleLabel);
-            this.titlePanel.Controls.Add(this.titleLabel);
-            this.titlePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.titlePanel.Name = "titlePanel";
-            this.titlePanel.TabIndex = 1;
+            this.headerLabel.AutoSize = true;
+            this.headerLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.headerLabel.Location = new System.Drawing.Point(60, 1);
+            this.headerLabel.Name = "headerLabel";
+            this.headerLabel.Size = new System.Drawing.Size(132, 25);
+            this.headerLabel.TabIndex = 1;
+            this.headerLabel.Text = "HT ISO Ripper";
             //
-            // titleLabel
+            // subHeaderLabel
             //
-            this.titleLabel.AutoSize = true;
-            this.titleLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 13F, System.Drawing.FontStyle.Bold);
-            this.titleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            this.titleLabel.Location = new System.Drawing.Point(0, 2);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Text = "HT ISO Ripper";
+            this.subHeaderLabel.AutoSize = true;
+            this.subHeaderLabel.Location = new System.Drawing.Point(62, 27);
+            this.subHeaderLabel.Name = "subHeaderLabel";
+            this.subHeaderLabel.Size = new System.Drawing.Size(380, 15);
+            this.subHeaderLabel.TabIndex = 2;
+            this.subHeaderLabel.Tag = "dim";
+            this.subHeaderLabel.Text = "Create an exact ISO image from a CD or DVD. Insert a disc to begin.";
             //
-            // subtitleLabel
+            // websiteLinkLabel
             //
-            this.subtitleLabel.AutoSize = true;
-            this.subtitleLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.subtitleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(91)))), ((int)(((byte)(100)))), ((int)(((byte)(114)))));
-            this.subtitleLabel.Location = new System.Drawing.Point(1, 27);
-            this.subtitleLabel.Name = "subtitleLabel";
-            this.subtitleLabel.Text = "HTREASURE LTD  •  Professional Disc Imaging";
+            this.websiteLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.websiteLinkLabel.Location = new System.Drawing.Point(608, 13);
+            this.websiteLinkLabel.Name = "websiteLinkLabel";
+            this.websiteLinkLabel.Size = new System.Drawing.Size(160, 18);
+            this.websiteLinkLabel.TabIndex = 3;
+            this.websiteLinkLabel.TabStop = true;
+            this.websiteLinkLabel.Text = "www.htreasure.com";
+            this.websiteLinkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolTip.SetToolTip(this.websiteLinkLabel, "Open the HTREASURE LTD website (https://www.htreasure.com)");
+            this.websiteLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLinkLabel_LinkClicked);
             //
-            // statusPill
+            // menuStrip
             //
-            this.statusPill.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.statusPill.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.statusPill.Name = "statusPill";
-            this.statusPill.Size = new System.Drawing.Size(90, 24);
-            this.statusPill.TabIndex = 2;
-            this.statusPill.Text = "Starting";
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.fileMenu, this.toolsMenu, this.helpMenu });
+            this.menuStrip.Location = new System.Drawing.Point(0, 44);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(784, 24);
+            this.menuStrip.TabIndex = 2;
             //
-            // navPanel
+            // fileMenu
             //
-            this.navPanel.BackColor = System.Drawing.Color.White;
-            this.navPanel.Controls.Add(this.navDashboardButton);
-            this.navPanel.Controls.Add(this.navDiscInfoButton);
-            this.navPanel.Controls.Add(this.navSettingsButton);
-            this.navPanel.Controls.Add(this.navAboutButton);
-            this.navPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.navPanel.Name = "navPanel";
-            this.navPanel.Padding = new System.Windows.Forms.Padding(12, 0, 12, 6);
-            this.navPanel.Size = new System.Drawing.Size(800, 40);
-            this.navPanel.TabIndex = 1;
-            this.navPanel.WrapContents = false;
+            this.fileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.startRippingMenuItem, this.chooseOutputMenuItem, this.openOutputFolderMenuItem, this.fileSeparator, this.exitMenuItem });
+            this.fileMenu.Name = "fileMenu";
+            this.fileMenu.Text = "&File";
+            this.startRippingMenuItem.Name = "startRippingMenuItem";
+            this.startRippingMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.startRippingMenuItem.Text = "&Start Ripping";
+            this.startRippingMenuItem.Click += new System.EventHandler(this.StartRippingMenuItem_Click);
+            this.chooseOutputMenuItem.Name = "chooseOutputMenuItem";
+            this.chooseOutputMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.chooseOutputMenuItem.Text = "Choose &Output File...";
+            this.chooseOutputMenuItem.Click += new System.EventHandler(this.ChooseOutputMenuItem_Click);
+            this.openOutputFolderMenuItem.Name = "openOutputFolderMenuItem";
+            this.openOutputFolderMenuItem.Text = "Open Output &Folder";
+            this.openOutputFolderMenuItem.Click += new System.EventHandler(this.OpenOutputFolderMenuItem_Click);
+            this.fileSeparator.Name = "fileSeparator";
+            this.exitMenuItem.Name = "exitMenuItem";
+            this.exitMenuItem.Text = "E&xit";
+            this.exitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
             //
-            // navDashboardButton
+            // toolsMenu
             //
-            this.navDashboardButton.AutoSize = true;
-            this.navDashboardButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.navDashboardButton.Name = "navDashboardButton";
-            this.navDashboardButton.Padding = new System.Windows.Forms.Padding(8, 2, 8, 2);
-            this.navDashboardButton.TabIndex = 0;
-            this.navDashboardButton.Text = "Dashboard";
+            this.toolsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.refreshDrivesMenuItem, this.discInfoMenuItem, this.ejectMenuItem, this.toolsSeparator1, this.viewLogMenuItem, this.openLogFolderMenuItem, this.toolsSeparator2, this.settingsMenuItem });
+            this.toolsMenu.Name = "toolsMenu";
+            this.toolsMenu.Text = "&Tools";
+            this.refreshDrivesMenuItem.Name = "refreshDrivesMenuItem";
+            this.refreshDrivesMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.refreshDrivesMenuItem.Text = "&Refresh Drives";
+            this.refreshDrivesMenuItem.Click += new System.EventHandler(this.RefreshDrivesMenuItem_Click);
+            this.discInfoMenuItem.Name = "discInfoMenuItem";
+            this.discInfoMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
+            this.discInfoMenuItem.Text = "Disc &Information...";
+            this.discInfoMenuItem.Click += new System.EventHandler(this.DiscInfoMenuItem_Click);
+            this.ejectMenuItem.Name = "ejectMenuItem";
+            this.ejectMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.ejectMenuItem.Text = "&Eject Disc";
+            this.ejectMenuItem.Click += new System.EventHandler(this.EjectMenuItem_Click);
+            this.toolsSeparator1.Name = "toolsSeparator1";
+            this.viewLogMenuItem.Name = "viewLogMenuItem";
+            this.viewLogMenuItem.Text = "View &Log...";
+            this.viewLogMenuItem.Click += new System.EventHandler(this.ViewLogMenuItem_Click);
+            this.openLogFolderMenuItem.Name = "openLogFolderMenuItem";
+            this.openLogFolderMenuItem.Text = "Open Log &Folder";
+            this.openLogFolderMenuItem.Click += new System.EventHandler(this.OpenLogFolderMenuItem_Click);
+            this.toolsSeparator2.Name = "toolsSeparator2";
+            this.settingsMenuItem.Name = "settingsMenuItem";
+            this.settingsMenuItem.Text = "&Settings...";
+            this.settingsMenuItem.Click += new System.EventHandler(this.SettingsMenuItem_Click);
             //
-            // navDiscInfoButton
+            // helpMenu
             //
-            this.navDiscInfoButton.AutoSize = true;
-            this.navDiscInfoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.navDiscInfoButton.Name = "navDiscInfoButton";
-            this.navDiscInfoButton.Padding = new System.Windows.Forms.Padding(8, 2, 8, 2);
-            this.navDiscInfoButton.TabIndex = 1;
-            this.navDiscInfoButton.Text = "Disc Information";
+            this.helpMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { this.userGuideMenuItem, this.troubleshootingMenuItem, this.releaseNotesMenuItem, this.licenceMenuItem, this.noticesMenuItem, this.helpSeparator, this.aboutMenuItem });
+            this.helpMenu.Name = "helpMenu";
+            this.helpMenu.Text = "&Help";
+            this.userGuideMenuItem.Name = "userGuideMenuItem";
+            this.userGuideMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.userGuideMenuItem.Tag = "USER-GUIDE.md";
+            this.userGuideMenuItem.Text = "&User Guide";
+            this.userGuideMenuItem.Click += new System.EventHandler(this.DocumentMenuItem_Click);
+            this.troubleshootingMenuItem.Name = "troubleshootingMenuItem";
+            this.troubleshootingMenuItem.Tag = "TROUBLESHOOTING.md";
+            this.troubleshootingMenuItem.Text = "&Troubleshooting";
+            this.troubleshootingMenuItem.Click += new System.EventHandler(this.DocumentMenuItem_Click);
+            this.releaseNotesMenuItem.Name = "releaseNotesMenuItem";
+            this.releaseNotesMenuItem.Tag = "RELEASE-NOTES.md";
+            this.releaseNotesMenuItem.Text = "&Release Notes";
+            this.releaseNotesMenuItem.Click += new System.EventHandler(this.DocumentMenuItem_Click);
+            this.licenceMenuItem.Name = "licenceMenuItem";
+            this.licenceMenuItem.Tag = "LICENSE.txt";
+            this.licenceMenuItem.Text = "&Licence";
+            this.licenceMenuItem.Click += new System.EventHandler(this.DocumentMenuItem_Click);
+            this.noticesMenuItem.Name = "noticesMenuItem";
+            this.noticesMenuItem.Tag = "THIRD-PARTY-LICENSES.md";
+            this.noticesMenuItem.Text = "Third-Party &Notices";
+            this.noticesMenuItem.Click += new System.EventHandler(this.DocumentMenuItem_Click);
+            this.helpSeparator.Name = "helpSeparator";
+            this.aboutMenuItem.Name = "aboutMenuItem";
+            this.aboutMenuItem.Text = "&About HT ISO Ripper";
+            this.aboutMenuItem.Click += new System.EventHandler(this.AboutMenuItem_Click);
             //
-            // navSettingsButton
+            // statusStrip
             //
-            this.navSettingsButton.AutoSize = true;
-            this.navSettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.navSettingsButton.Name = "navSettingsButton";
-            this.navSettingsButton.Padding = new System.Windows.Forms.Padding(8, 2, 8, 2);
-            this.navSettingsButton.TabIndex = 2;
-            this.navSettingsButton.Text = "Settings";
-            //
-            // navAboutButton
-            //
-            this.navAboutButton.AutoSize = true;
-            this.navAboutButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.navAboutButton.Name = "navAboutButton";
-            this.navAboutButton.Padding = new System.Windows.Forms.Padding(8, 2, 8, 2);
-            this.navAboutButton.TabIndex = 3;
-            this.navAboutButton.Text = "About";
-            //
-            // separator
-            //
-            this.separator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(222)))), ((int)(((byte)(234)))));
-            this.separator.Dock = System.Windows.Forms.DockStyle.Top;
-            this.separator.Name = "separator";
-            this.separator.Size = new System.Drawing.Size(800, 1);
-            this.separator.TabIndex = 2;
-            //
-            // contentPanel
-            //
-            this.contentPanel.AutoScroll = true;
-            this.contentPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
-            this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contentPanel.Name = "contentPanel";
-            this.contentPanel.TabIndex = 3;
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.statusStripLabel, this.statusRightLabel });
+            this.statusStrip.Location = new System.Drawing.Point(0, 634);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(784, 22);
+            this.statusStrip.TabIndex = 3;
+            this.statusStripLabel.Name = "statusStripLabel";
+            this.statusStripLabel.Spring = true;
+            this.statusStripLabel.Text = "Ready";
+            this.statusStripLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.statusRightLabel.Name = "statusRightLabel";
+            this.statusRightLabel.Text = "";
             //
             // MainForm
             //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(800, 760);
-            this.Controls.Add(this.contentPanel);
-            this.Controls.Add(this.separator);
-            this.Controls.Add(this.navPanel);
-            this.Controls.Add(this.headerTable);
-            this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.MinimumSize = new System.Drawing.Size(720, 640);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(784, 656);
+            this.Controls.Add(this.statusStrip);
+            this.Controls.Add(this.menuStrip);
+            this.Controls.Add(this.headerPanel);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MainMenuStrip = this.menuStrip;
+            this.MinimumSize = new System.Drawing.Size(740, 695);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HT ISO Ripper";
-            this.headerTable.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
-            this.titlePanel.ResumeLayout(false);
-            this.titlePanel.PerformLayout();
-            this.navPanel.ResumeLayout(false);
-            this.navPanel.PerformLayout();
+            this.headerPanel.ResumeLayout(false);
+            this.headerPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.headerIcon)).EndInit();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
-        private System.Windows.Forms.TableLayoutPanel headerTable;
-        private System.Windows.Forms.PictureBox logoPictureBox;
-        private System.Windows.Forms.Panel titlePanel;
-        private System.Windows.Forms.Label titleLabel;
-        private System.Windows.Forms.Label subtitleLabel;
-        private HTISORipper.UI.Controls.StatusPill statusPill;
-        private System.Windows.Forms.FlowLayoutPanel navPanel;
-        private System.Windows.Forms.Button navDashboardButton;
-        private System.Windows.Forms.Button navDiscInfoButton;
-        private System.Windows.Forms.Button navSettingsButton;
-        private System.Windows.Forms.Button navAboutButton;
-        private System.Windows.Forms.Panel separator;
-        private System.Windows.Forms.Panel contentPanel;
+        private System.Windows.Forms.Panel headerPanel;
+        private System.Windows.Forms.PictureBox headerIcon;
+        private System.Windows.Forms.Label headerLabel;
+        private System.Windows.Forms.Label subHeaderLabel;
+        private System.Windows.Forms.LinkLabel websiteLinkLabel;
+        private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem fileMenu;
+        private System.Windows.Forms.ToolStripMenuItem startRippingMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chooseOutputMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openOutputFolderMenuItem;
+        private System.Windows.Forms.ToolStripSeparator fileSeparator;
+        private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolsMenu;
+        private System.Windows.Forms.ToolStripMenuItem refreshDrivesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem discInfoMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ejectMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolsSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem viewLogMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openLogFolderMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolsSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem settingsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpMenu;
+        private System.Windows.Forms.ToolStripMenuItem userGuideMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem troubleshootingMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem releaseNotesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem licenceMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem noticesMenuItem;
+        private System.Windows.Forms.ToolStripSeparator helpSeparator;
+        private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel statusStripLabel;
+        private System.Windows.Forms.ToolStripStatusLabel statusRightLabel;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

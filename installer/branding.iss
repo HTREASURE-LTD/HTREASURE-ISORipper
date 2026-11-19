@@ -5,7 +5,7 @@
 //   ISCC /DSupportUrl=https://... HTISORipper.iss
 
 #ifndef AppPublisherUrl
-  #define AppPublisherUrl ""
+  #define AppPublisherUrl "https://www.htreasure.com"
 #endif
 #ifndef SupportUrl
   #define SupportUrl ""

@@ -48,6 +48,7 @@ namespace HTISORipper.UI
                 services.Log = _log;
                 services.SettingsStore = new SettingsStore(SettingsStore.DefaultPath);
                 services.Settings = services.SettingsStore.Load();
+                ThemeManager.SetTheme(services.Settings.Theme);
                 _log.ApplyRetention(services.Settings.LogRetentionDays);
                 _log.Info("HT ISO Ripper " + AppInfo.Version + " starting on " + Environment.OSVersion.VersionString
                           + (Environment.Is64BitProcess ? " (64-bit process)" : " (32-bit process)")

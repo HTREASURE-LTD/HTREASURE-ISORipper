@@ -8,7 +8,7 @@ namespace HTISORipper.UI
     /// <summary>HTREASURE LTD brand palette and shared styling helpers.</summary>
     internal static class Theme
     {
-        public static readonly Color Navy = ColorTranslator.FromHtml("#0B3D91");
+        public static readonly Color Navy = Color.FromArgb(22, 58, 110);   // HTREASURE design template accent (shared with HT ISO Creator)
         public static readonly Color Blue = ColorTranslator.FromHtml("#1976D2");
         public static readonly Color White = Color.White;
         public static readonly Color LightGrey = ColorTranslator.FromHtml("#F3F6FA");
@@ -27,28 +27,15 @@ namespace HTISORipper.UI
 
         public const string FontName = "Segoe UI";
 
+        /// <summary>Marks the button as the window's primary action; ThemeManager colours it.</summary>
         public static void StylePrimary(Button button)
         {
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.FlatAppearance.MouseOverBackColor = NavyHover;
-            button.FlatAppearance.MouseDownBackColor = Navy;
-            button.BackColor = Navy;
-            button.ForeColor = White;
-            button.Cursor = Cursors.Hand;
-            button.UseVisualStyleBackColor = false;
+            button.Tag = ThemeManager.PrimaryTag;
         }
 
+        /// <summary>Secondary buttons use the standard Windows style in the design template.</summary>
         public static void StyleSecondary(Button button)
         {
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderColor = Border;
-            button.FlatAppearance.BorderSize = 1;
-            button.FlatAppearance.MouseOverBackColor = LightGrey;
-            button.BackColor = White;
-            button.ForeColor = Text;
-            button.Cursor = Cursors.Hand;
-            button.UseVisualStyleBackColor = false;
         }
 
         public static Image LoadImage(string name)

@@ -195,7 +195,7 @@ namespace HTISORipper.UI.Forms
             this.Controls.Add(this.buttonPanel);
             this.Controls.Add(this.detailLabel);
             this.Controls.Add(this.headlinePanel);
-            this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(640, 420);

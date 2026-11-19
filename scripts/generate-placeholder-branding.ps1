@@ -38,19 +38,36 @@ function New-LogoBitmap([int]$size) {
     $brush = New-Object System.Drawing.Drawing2D.LinearGradientBrush($rect, $blue, $navy, 45.0)
     $g.FillPath($brush, $path)
 
-    # Disc: white ring, blue track groove, hub.
-    $c = $size / 2.0
-    $outer = $size * 0.30
-    $penW = [Math]::Max(1.5, $size * 0.075)
+    # HT ISO Ripper mark: a disc (upper left) being "ripped" by a down arrow into a tray (lower right).
+    $whiteBrush = New-Object System.Drawing.SolidBrush($white)
+    $penW = [single][Math]::Max(1.5, $size * 0.075)
     $pen = New-Object System.Drawing.Pen($white, $penW)
-    $g.DrawEllipse($pen, [float]($c - $outer), [float]($c - $outer), [float]($outer * 2), [float]($outer * 2))
+    $pen.StartCap = 'Round'; $pen.EndCap = 'Round'; $pen.LineJoin = 'Round'
+
+    $cx = [single]($size * 0.38); $cy = [single]($size * 0.40); $outer = [single]($size * 0.25)
+    $g.DrawEllipse($pen, [single]($cx - $outer), [single]($cy - $outer), [single]($outer * 2), [single]($outer * 2))
     if ($size -ge 32) {
-        $groove = $size * 0.18
-        $pen2 = New-Object System.Drawing.Pen($white, [Math]::Max(1.0, $size * 0.035))
-        $g.DrawArc($pen2, [float]($c - $groove), [float]($c - $groove), [float]($groove * 2), [float]($groove * 2), 200, 120)
+        $groove = [single]($size * 0.15)
+        $pen2 = New-Object System.Drawing.Pen($white, [single][Math]::Max(1.0, $size * 0.03))
+        $g.DrawArc($pen2, [single]($cx - $groove), [single]($cy - $groove), [single]($groove * 2), [single]($groove * 2), 200, 120)
     }
-    $hub = [Math]::Max(1.5, $size * 0.075)
-    $g.FillEllipse((New-Object System.Drawing.SolidBrush($white)), [float]($c - $hub), [float]($c - $hub), [float]($hub * 2), [float]($hub * 2))
+    $hub = [single][Math]::Max(1.2, $size * 0.06)
+    $g.FillEllipse($whiteBrush, [single]($cx - $hub), [single]($cy - $hub), [single]($hub * 2), [single]($hub * 2))
+
+    # Arrow from the disc edge down into the tray.
+    $ax = [single]($size * 0.74)
+    $top = [single]($size * 0.40); $tip = [single]($size * 0.76)
+    $g.DrawLine($pen, $ax, $top, $ax, [single]($tip - $penW * 0.6))
+    $head = [single]($size * 0.13)
+    $arrow = [System.Drawing.PointF[]]@(
+        [System.Drawing.PointF]::new([single]($ax - $head), [single]($tip - $head)),
+        [System.Drawing.PointF]::new([single]($ax + $head), [single]($tip - $head)),
+        [System.Drawing.PointF]::new($ax, [single]($tip + $penW * 0.3)))
+    $g.FillPolygon($whiteBrush, $arrow)
+
+    # Tray (the image file) under the arrow.
+    $ty = [single]($size * 0.86)
+    $g.DrawLine($pen, [single]($size * 0.52), $ty, [single]($size * 0.90), $ty)
     $g.Dispose()
     return $bmp
 }

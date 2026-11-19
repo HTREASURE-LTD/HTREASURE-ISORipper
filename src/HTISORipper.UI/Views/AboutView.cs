@@ -20,7 +20,7 @@ namespace HTISORipper.UI.Views
             productLabel.Text = AppInfo.ProductName;
             taglineLabel.Text = AppInfo.Tagline;
             publisherLabel.Text = "Developed by " + AppInfo.Publisher;
-            versionLabel.Text = "Version " + AppInfo.Version + "  (" + AppInfo.Stage + ", " + AppInfo.RuntimeBuild + ", "
+            versionLabel.Text = "Version " + AppInfo.Version + "  (" + AppInfo.RuntimeBuild + ", "
                                 + (Environment.Is64BitProcess ? "64-bit" : "32-bit") + ")";
             copyrightLabel.Text = AppInfo.Copyright;
             noticeLabel.Text = "HT ISO Ripper reads CDs and DVDs strictly read-only. It does not bypass DRM, encryption or copy protection, "
@@ -30,6 +30,11 @@ namespace HTISORipper.UI.Views
         internal void Initialize(AppServices services)
         {
             _services = services;
+        }
+
+        private void WebsiteLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MainForm.OpenWebsite(FindForm());
         }
 
         private void ViewLogButton_Click(object sender, EventArgs e)

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -18,6 +19,8 @@ namespace HTISORipper.UI.Views
 {
     public partial class DashboardView : UserControl
     {
+        private enum MessageTone { None, Dim, Warning, Error, Success }
+
         private AppServices _services;
         private List<OpticalDriveInfo> _drives = new List<OpticalDriveInfo>();
         private OpticalDriveInfo _currentDrive;
@@ -28,6 +31,10 @@ namespace HTISORipper.UI.Views
         private bool _suppressPathEvents;
         private bool _pathEditedByUser;
         private CancellationTokenSource _cts;
+        private Stopwatch _ripClock;
+        private string _lastOutputPath;
+        private MessageTone _sourceTone = MessageTone.None;
+        private MessageTone _progressTone = MessageTone.None;
 
         public event EventHandler DiscChanged;
         public event EventHandler<StatusEventArgs> StatusChanged;
@@ -36,18 +43,13 @@ namespace HTISORipper.UI.Views
         public DashboardView()
         {
             InitializeComponent();
-            Theme.StylePrimary(startButton);
-            Theme.StyleSecondary(browseButton);
-            Theme.StyleSecondary(ejectButton);
-            Theme.StyleSecondary(cancelButton);
-            discIconBox.Image = CreateDiscIcon(64);
 
             formatComboBox.Items.Add(new ComboItem<ImageFormat>("Standard ISO (.iso)", ImageFormat.Iso));
             formatComboBox.SelectedIndex = 0;
             compressionComboBox.Items.Add(new ComboItem<int>("None (standard, uncompressed ISO)", 0));
             compressionComboBox.SelectedIndex = 0;
-            toolTip.SetToolTip(compressionComboBox, "Lossless .iso.gz / .iso.xz output is planned for Stage 3. Only fully implemented formats are offered.");
-            toolTip.SetToolTip(formatComboBox, "BIN/CUE for audio and mixed-mode CDs is planned for Stage 3.");
+            toolTip.SetToolTip(compressionComboBox, "Lossless .iso.gz / .iso.xz output is planned for a later version. Only fully implemented formats are offered.");
+            toolTip.SetToolTip(formatComboBox, "BIN/CUE for audio and mixed-mode CDs is planned for a later version.");
 
             verifyComboBox.Items.Add(new ComboItem<VerificationMode>("Full: re-read disc and compare", VerificationMode.FullSourceCompare));
             verifyComboBox.Items.Add(new ComboItem<VerificationMode>("Structural: re-hash file + check ISO/UDF", VerificationMode.Structural));
@@ -61,6 +63,7 @@ namespace HTISORipper.UI.Views
             toolTip.SetToolTip(policyComboBox, "\"Continue\" fills unreadable sectors with zeros, names the file *.INCOMPLETE.iso and writes a bad-sector list. Such an image is never reported as verified.");
             toolTip.SetToolTip(verifyComboBox, "Only \"Full\" verification can confirm that the image matches the disc.");
             toolTip.SetToolTip(speedComboBox, "Not every drive supports speed control. Quiet/Balanced reduce noise and can help with marginal discs.");
+            toolTip.SetToolTip(footerLabel, "HT ISO Ripper opens the drive read-only. The source disc is never modified.");
         }
 
         public bool IsBusy { get { return _busy; } }
@@ -89,9 +92,34 @@ namespace HTISORipper.UI.Views
             if (!_pathEditedByUser) SuggestOutputPath();
         }
 
-        public void Start()
+        /// <summary>Re-applies state colours after ThemeManager has re-coloured the form.</summary>
+        public void ApplyThemeColours()
         {
-            LoadDrivesAsync();
+            ApplyTone(sourceMessageLabel, _sourceTone);
+            ApplyTone(progressStatusLabel, _progressTone);
+            ThemeManager.UpdatePrimary(startButton);
+        }
+
+        public void Start() { LoadDrivesAsync(); }
+        public void RefreshDrives() { if (!_busy) LoadDrivesAsync(); }
+        public void StartRipping() { StartButton_Click(this, EventArgs.Empty); }
+        public void ChooseOutputFile() { if (!_busy) BrowseButton_Click(this, EventArgs.Empty); }
+        public void EjectDisc() { EjectButton_Click(this, EventArgs.Empty); }
+
+        public void OpenOutputFolder()
+        {
+            string target = _lastOutputPath;
+            string dir = null;
+            try { dir = Path.GetDirectoryName(target ?? outputPathTextBox.Text.Trim()); } catch (ArgumentException) { }
+            if (string.IsNullOrEmpty(dir) || !Directory.Exists(dir)) dir = _services.Settings.DefaultOutputDirectory;
+            if (!Directory.Exists(dir))
+            {
+                MessageBox.Show(FindForm(), "The output folder does not exist yet. It is created when the first image is saved.",
+                    AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            string args = target != null && File.Exists(target) ? "/select,\"" + target + "\"" : "\"" + dir + "\"";
+            Process.Start(new ProcessStartInfo("explorer.exe", args) { UseShellExecute = false });
         }
 
         public void RequestCancel()
@@ -100,7 +128,7 @@ namespace HTISORipper.UI.Views
             if (cts != null && !cts.IsCancellationRequested)
             {
                 cts.Cancel();
-                progressStatusLabel.Text = "Cancelling…";
+                progressStatusLabel.Text = "Cancelling...";
                 cancelButton.Enabled = false;
             }
         }
@@ -136,7 +164,7 @@ namespace HTISORipper.UI.Views
                 driveComboBox.SelectedIndex = 0;
                 SetDisc(null, "No optical drive detected");
                 discDetailLabel.Text = "No CD/DVD drive was found. Connect a drive (USB drives are supported) and it will appear automatically.";
-                RaiseStatus("No Drive", StatusKind.Warning);
+                RaiseStatus("No optical drive detected", StatusKind.Warning);
             }
             else
             {
@@ -166,8 +194,8 @@ namespace HTISORipper.UI.Views
         {
             _currentDrive = driveComboBox.SelectedItem as OpticalDriveInfo;
             if (_currentDrive == null) return;
-            SetDisc(null, "Checking drive…");
-            discDetailLabel.Text = "Checking drive…";
+            SetDisc(null, "Checking drive...");
+            discDetailLabel.Text = "Checking drive...";
             DriveMediaState known = _services.Monitor.GetState(_currentDrive.DriveLetter);
             if (known == DriveMediaState.Unknown) _services.Monitor.RequestRefresh();   // result arrives via DriveStateChanged
             else ApplyMediaState(known);
@@ -182,23 +210,23 @@ namespace HTISORipper.UI.Views
                     break;
                 case DriveMediaState.NoDisc:
                     SetDisc(null, "Waiting for disc");
-                    discDetailLabel.Text = "Disc status: Waiting for disc. Insert a CD or DVD.";
-                    RaiseStatus("No Disc", StatusKind.Neutral);
+                    discDetailLabel.Text = "Disc status: waiting for disc. Insert a CD or DVD.";
+                    RaiseStatus("Waiting for disc", StatusKind.Neutral);
                     break;
                 case DriveMediaState.NotReady:
                     SetDisc(null, "Disc not ready");
-                    discDetailLabel.Text = "Disc status: The drive is reading the disc. Please wait…";
-                    RaiseStatus("Disc Not Ready", StatusKind.Busy);
+                    discDetailLabel.Text = "Disc status: the drive is reading the disc. Please wait...";
+                    RaiseStatus("Disc not ready", StatusKind.Busy);
                     break;
                 case DriveMediaState.AccessDenied:
                     SetDisc(null, "Device access denied");
                     discDetailLabel.Text = "Windows denied access to this drive. A group policy may restrict CD/DVD access for your account.";
-                    RaiseStatus("Access Denied", StatusKind.Error);
+                    RaiseStatus("Device access denied", StatusKind.Error);
                     break;
                 default:
                     SetDisc(null, "Drive not responding");
                     discDetailLabel.Text = "The drive did not respond. Check the connection and try again.";
-                    RaiseStatus("Drive Error", StatusKind.Error);
+                    RaiseStatus("Drive not responding", StatusKind.Error);
                     break;
             }
         }
@@ -208,8 +236,8 @@ namespace HTISORipper.UI.Views
             OpticalDriveInfo drive = _currentDrive;
             if (drive == null) return;
             int sequence = ++_inspectSequence;
-            discDetailLabel.Text = "Reading disc information…";
-            RaiseStatus("Reading Disc", StatusKind.Busy);
+            discDetailLabel.Text = "Reading disc information...";
+            RaiseStatus("Reading disc information", StatusKind.Busy);
 
             DiscInfo disc = null;
             DriveMediaState state = DriveMediaState.Unknown;
@@ -238,7 +266,7 @@ namespace HTISORipper.UI.Views
             {
                 SetDisc(null, "Unreadable disc");
                 discDetailLabel.Text = error;
-                RaiseStatus("Unreadable", StatusKind.Error);
+                RaiseStatus("Unreadable disc", StatusKind.Error);
                 return;
             }
             if (disc == null)
@@ -248,9 +276,10 @@ namespace HTISORipper.UI.Views
             }
 
             SetDisc(disc, disc.CanCreateIso ? "Disc ready" : "Unsupported disc");
-            discDetailLabel.Text = disc.Label + "  •  " + disc.MediaTypeName + "  •  " + Format.Bytes(disc.ImageBytes)
-                                   + "  •  " + disc.Filesystem.Describe();
-            RaiseStatus(disc.CanCreateIso ? "Disc Ready" : "Unsupported", disc.CanCreateIso ? StatusKind.Ready : StatusKind.Warning);
+            discDetailLabel.Text = disc.CanCreateIso
+                ? "Disc ready. Check the options and output file, then click Start Ripping."
+                : "This disc cannot be saved as a standard ISO image.";
+            RaiseStatus(disc.CanCreateIso ? "Disc ready" : "Unsupported disc", disc.CanCreateIso ? StatusKind.Ready : StatusKind.Warning);
             if (!_pathEditedByUser) SuggestOutputPath();
         }
 
@@ -259,25 +288,50 @@ namespace HTISORipper.UI.Views
             _currentDisc = disc;
             _currentStateText = stateText;
 
-            if (disc != null && !disc.CanCreateIso)
-                ShowSourceMessage(disc.UnsupportedReason, Theme.ErrorTint, Theme.Error);
-            else if (disc != null && disc.Warnings.Count > 0)
-                ShowSourceMessage(string.Join(Environment.NewLine, disc.Warnings.ToArray()), Theme.WarningTint, Color.FromArgb(0x8A, 0x4B, 0x00));
+            if (disc == null)
+            {
+                labelValue.Text = typeValue.Text = fsValue.Text = sizeValue.Text = tracksValue.Text = formatSupportValue.Text = "--";
+            }
             else
-                sourceMessageLabel.Visible = false;
+            {
+                labelValue.Text = disc.Label;
+                typeValue.Text = disc.MediaTypeName;
+                fsValue.Text = disc.Filesystem.Describe();
+                sizeValue.Text = Format.BytesWithExact(disc.ImageBytes);
+                tracksValue.Text = disc.SessionCount + " / " + disc.Tracks.Count
+                    + (disc.AudioTrackCount > 0 ? " (" + disc.AudioTrackCount + " audio)" : string.Empty);
+                formatSupportValue.Text = disc.CanCreateIso ? "ISO" : disc.RecommendedFormat == ImageFormat.BinCue ? "BIN/CUE needed (not yet supported)" : "Not supported";
+            }
+
+            if (disc != null && !disc.CanCreateIso) ShowSourceMessage(disc.UnsupportedReason, MessageTone.Error);
+            else if (disc != null && disc.Warnings.Count > 0) ShowSourceMessage(string.Join(" ", disc.Warnings.ToArray()), MessageTone.Warning);
+            else ShowSourceMessage(null, MessageTone.None);
 
             UpdateControls();
             var handler = DiscChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        private void ShowSourceMessage(string text, Color back, Color fore)
+        private void ShowSourceMessage(string text, MessageTone tone)
         {
-            sourceMessageLabel.Text = text;
-            sourceMessageLabel.BackColor = back;
-            sourceMessageLabel.ForeColor = fore;
-            sourceMessageLabel.MaximumSize = new Size(Math.Max(200, layout.ClientSize.Width - layout.Padding.Horizontal), 0);
-            sourceMessageLabel.Visible = true;
+            _sourceTone = tone;
+            sourceMessageLabel.Text = text ?? string.Empty;
+            sourceMessageLabel.Visible = !string.IsNullOrEmpty(text);
+            toolTip.SetToolTip(sourceMessageLabel, text ?? string.Empty);
+            ApplyTone(sourceMessageLabel, tone);
+        }
+
+        private static void ApplyTone(Label label, MessageTone tone)
+        {
+            ThemePalette p = ThemeManager.Current;
+            switch (tone)
+            {
+                case MessageTone.Error: label.ForeColor = p.ErrorText; break;
+                case MessageTone.Warning: label.ForeColor = p.WarningText; break;
+                case MessageTone.Success: label.ForeColor = p.SuccessText; break;
+                case MessageTone.Dim: label.ForeColor = p.DimText; break;
+                default: label.ForeColor = p.Text; break;
+            }
         }
 
         // ------------------------------------------------------------------ output path
@@ -322,7 +376,7 @@ namespace HTISORipper.UI.Views
                 }
                 catch (ArgumentException) { }
 
-                if (dialog.ShowDialog(this) == DialogResult.OK)
+                if (dialog.ShowDialog(FindForm()) == DialogResult.OK)
                 {
                     _suppressPathEvents = true;
                     outputPathTextBox.Text = dialog.FileName;
@@ -342,7 +396,7 @@ namespace HTISORipper.UI.Views
             string problem = ValidateOutputPath(ref path);
             if (problem != null)
             {
-                MessageBox.Show(this, problem, AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(FindForm(), problem, AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 outputPathTextBox.Focus();
                 return;
             }
@@ -350,7 +404,7 @@ namespace HTISORipper.UI.Views
             bool overwrite = false;
             if (File.Exists(path))
             {
-                DialogResult answer = MessageBox.Show(this, "\"" + path + "\" already exists.\n\nReplace it? The existing file is only replaced after the new image has been read completely.",
+                DialogResult answer = MessageBox.Show(FindForm(), "\"" + path + "\" already exists.\n\nReplace it? The existing file is only replaced after the new image has been read completely.",
                     AppInfo.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
                 if (answer != DialogResult.Yes) return;
                 overwrite = true;
@@ -402,11 +456,9 @@ namespace HTISORipper.UI.Views
             _cts = new CancellationTokenSource();
             CancellationToken token = _cts.Token;
             SetBusy(true, drive);
-            RaiseStatus("Ripping", StatusKind.Busy);
-            progressCard.Visible = true;
-            progressBar.Value = 0;
-            progressStatusLabel.Text = "Preparing…";
-            progressStatsLabel.Text = "-";
+            RaiseStatus("Ripping " + disc.Label, StatusKind.Busy);
+            ResetProgress("Preparing...");
+            _ripClock = Stopwatch.StartNew();
 
             var progress = new Progress<ImagingProgress>(p => ShowProgress(p, disc.Family));
             ImagingResult result = null;
@@ -465,6 +517,7 @@ namespace HTISORipper.UI.Views
             }
             finally
             {
+                _ripClock.Stop();
                 _cts.Dispose();
                 _cts = null;
                 SetBusy(false, drive);
@@ -473,20 +526,20 @@ namespace HTISORipper.UI.Views
 
             if (fatal != null)
             {
-                progressStatusLabel.Text = "Imaging failed";
-                progressStatusLabel.ForeColor = Theme.Error;
-                RaiseStatus("Failed", StatusKind.Error);
-                MessageBox.Show(this, fatal, AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SetProgressStatus("Imaging failed", MessageTone.Error);
+                RaiseStatus("Imaging failed", StatusKind.Error);
+                MessageBox.Show(FindForm(), fatal, AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
+            if (result.OutputPath != null) _lastOutputPath = result.OutputPath;
             ShowOutcome(result, report);
             using (var completion = new CompletionForm(disc, drive, result, report, ejected, log.CurrentLogFile))
             {
                 completion.ShowDialog(FindForm());
                 if (completion.RipAnother)
                 {
-                    progressCard.Visible = false;
+                    ResetProgress("Ready. Insert the next disc.");
                     _pathEditedByUser = false;
                 }
             }
@@ -494,45 +547,75 @@ namespace HTISORipper.UI.Views
             if (!ejected) InspectCurrentDriveAsync();
         }
 
+        private void ResetProgress(string status)
+        {
+            progressBar.Value = 0;
+            SetProgressStatus(status, MessageTone.None);
+            readValue.Text = elapsedValue.Text = remainingValue.Text = speedValue.Text = errorsValue.Text = "--";
+        }
+
+        private void SetProgressStatus(string text, MessageTone tone)
+        {
+            _progressTone = tone;
+            progressStatusLabel.Text = text;
+            ApplyTone(progressStatusLabel, tone);
+        }
+
         private void ShowOutcome(ImagingResult result, VerificationReport report)
         {
             CompletionStatus status = CompletionStatus.Evaluate(result, report);
-            progressStatusLabel.Text = status.Headline;
-            progressStatusLabel.ForeColor = status.Color;
+            MessageTone tone = status.Color == Theme.Success ? MessageTone.Success : status.Color == Theme.Error ? MessageTone.Error : MessageTone.Warning;
+            SetProgressStatus(status.Headline, tone);
             if (result.Outcome == ImagingOutcome.Success) progressBar.Value = progressBar.Maximum;
-            StatusKind kind = status.Color == Theme.Success ? StatusKind.Ready : status.Color == Theme.Error ? StatusKind.Error : StatusKind.Warning;
-            RaiseStatus(status.ShortText, kind);
+            elapsedValue.Text = Format.Duration(result.Elapsed);
+            remainingValue.Text = "--";
+            StatusKind kind = tone == MessageTone.Success ? StatusKind.Ready : tone == MessageTone.Error ? StatusKind.Error : StatusKind.Warning;
+            RaiseStatus(status.Headline, kind);
         }
 
         private void ShowProgress(ImagingProgress p, MediaFamily family)
         {
-            progressStatusLabel.ForeColor = Theme.Text;
+            string text;
             switch (p.Phase)
             {
-                case ImagingPhase.Reading: progressStatusLabel.Text = "Reading disc…"; break;
-                case ImagingPhase.Finalising: progressStatusLabel.Text = "Finalising image…"; break;
-                case ImagingPhase.VerifyingFile: progressStatusLabel.Text = "Verifying image file…"; break;
-                case ImagingPhase.VerifyingSource: progressStatusLabel.Text = "Verifying: comparing image with disc…"; break;
-                default: progressStatusLabel.Text = p.Message ?? "Working…"; break;
+                case ImagingPhase.Reading: text = "Reading disc..."; break;
+                case ImagingPhase.Finalising: text = "Finalising image..."; break;
+                case ImagingPhase.VerifyingFile: text = "Verifying the image file..."; break;
+                case ImagingPhase.VerifyingSource: text = "Verifying: comparing the image with the disc..."; break;
+                default: text = p.Message ?? "Working..."; break;
             }
-            if (_cts != null && _cts.IsCancellationRequested) progressStatusLabel.Text = "Cancelling…";
+            if (_cts != null && _cts.IsCancellationRequested) text = "Cancelling...";
+            SetProgressStatus(text, MessageTone.None);
             progressBar.Value = (int)Math.Round(p.Fraction * progressBar.Maximum);
 
-            var parts = new List<string>();
-            parts.Add(Format.Bytes(p.SectorsDone * 2048) + " of " + Format.Bytes(p.TotalSectors * 2048) + " (" + (p.Fraction * 100).ToString("0.0") + "%)");
-            parts.Add("Speed " + Format.Speed(p.BytesPerSecond, family));
-            parts.Add("Remaining " + (p.EstimatedRemaining.HasValue ? Format.Duration(p.EstimatedRemaining.Value) : "calculating…"));
+            readValue.Text = Format.Bytes(p.SectorsDone * 2048) + " of " + Format.Bytes(p.TotalSectors * 2048)
+                             + " (" + (p.Fraction * 100).ToString("0.0", CultureInfo.CurrentCulture) + "%)";
+            speedValue.Text = Format.Speed(p.BytesPerSecond, family);
+            remainingValue.Text = p.EstimatedRemaining.HasValue ? Format.Duration(p.EstimatedRemaining.Value) : "calculating...";
+            if (_ripClock != null) elapsedValue.Text = Format.Duration(_ripClock.Elapsed);
             if (p.Phase == ImagingPhase.Reading)
-            {
-                parts.Add("Read errors " + p.UnreadableSectors);
-                if (p.RecoveredSectors > 0) parts.Add("Recovered " + p.RecoveredSectors);
-            }
-            progressStatsLabel.Text = string.Join("   •   ", parts.ToArray());
+                errorsValue.Text = p.UnreadableSectors + (p.RecoveredSectors > 0 ? "  (" + p.RecoveredSectors + " recovered by retry)" : string.Empty);
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
             RequestCancel();
+        }
+
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            RefreshDrives();
+        }
+
+        private void OpenFolderButton_Click(object sender, EventArgs e)
+        {
+            OpenOutputFolder();
+        }
+
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            Form form = FindForm();
+            if (form != null) form.Close();
         }
 
         private async void EjectButton_Click(object sender, EventArgs e)
@@ -559,8 +642,8 @@ namespace HTISORipper.UI.Views
                     return false;
                 }
             });
-            ejectButton.Enabled = !_busy;
-            if (!ok) MessageBox.Show(this, "The drive did not eject the disc. It may be in use by another program.", AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            UpdateControls();
+            if (!ok) MessageBox.Show(FindForm(), "The drive did not eject the disc. It may be in use by another program.", AppInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             _services.Monitor.RequestRefresh();
         }
 
@@ -571,7 +654,6 @@ namespace HTISORipper.UI.Views
             _busy = busy;
             if (drive != null) _services.Monitor.SetBusy(drive.DriveLetter, busy);
             cancelButton.Enabled = busy;
-            cancelButton.Visible = busy;
             UpdateControls();
             var handler = BusyChanged;
             if (handler != null) handler(this, EventArgs.Empty);
@@ -579,13 +661,14 @@ namespace HTISORipper.UI.Views
 
         private void UpdateControls()
         {
-            bool canRip = !_busy && _currentDisc != null && _currentDisc.CanCreateIso;
-            startButton.Enabled = canRip;
-            startButton.BackColor = canRip ? Theme.Navy : Color.FromArgb(0x9F, 0xB3, 0xD6);
+            startButton.Enabled = !_busy && _currentDisc != null && _currentDisc.CanCreateIso;
+            ThemeManager.UpdatePrimary(startButton);
             driveComboBox.Enabled = !_busy;
+            refreshButton.Enabled = !_busy;
             ejectButton.Enabled = !_busy && _currentDrive != null;
             outputPathTextBox.ReadOnly = _busy;
             browseButton.Enabled = !_busy;
+            closeButton.Enabled = !_busy;
             verifyComboBox.Enabled = speedComboBox.Enabled = policyComboBox.Enabled = retriesUpDown.Enabled = ejectCheckBox.Enabled = !_busy;
         }
 
@@ -609,22 +692,6 @@ namespace HTISORipper.UI.Views
         {
             var item = combo.SelectedItem as ComboItem<T>;
             return item != null ? item.Value : default(T);
-        }
-
-        private static Bitmap CreateDiscIcon(int size)
-        {
-            var bmp = new Bitmap(size, size);
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                float w = size * 0.08f;
-                using (var pen = new Pen(Theme.Text, w))
-                    g.DrawEllipse(pen, w, w, size - 2 * w - 1, size - 2 * w - 1);
-                float hub = size * 0.24f;
-                using (var pen = new Pen(Theme.Text, w * 0.9f))
-                    g.DrawEllipse(pen, size / 2f - hub / 2, size / 2f - hub / 2, hub, hub);
-            }
-            return bmp;
         }
     }
 

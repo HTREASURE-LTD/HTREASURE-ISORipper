@@ -73,7 +73,7 @@ namespace HTISORipper.UI.Forms
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(61)))), ((int)(((byte)(145)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(58)))), ((int)(((byte)(110)))));
             this.ClientSize = new System.Drawing.Size(480, 240);
             this.Controls.Add(this.logoPictureBox);
             this.Controls.Add(this.titleLabel);

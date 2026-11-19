@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
@@ -53,6 +54,12 @@ namespace HTISORipper.UI.Forms
             openFolderButton.Enabled = output != null && File.Exists(output);
             ejectButton.Enabled = !ejected;
             detailsListView.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
+
+            // Design template; the result banner keeps its status colour (green / amber / red).
+            ThemeManager.Apply(this);
+            headlinePanel.BackColor = status.Color;
+            headlineLabel.BackColor = status.Color;
+            headlineLabel.ForeColor = Color.White;
         }
 
         public bool RipAnother { get; private set; }

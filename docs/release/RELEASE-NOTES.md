@@ -1,9 +1,12 @@
 # HT ISO Ripper 1.0.0 – Release Notes
 
-**Status: release candidate.** Not for public distribution until the blockers below are cleared.
+**Status: pre-release** (published 2026-11-19 for HTREASURE LTD internal testing). It becomes a full release once the blockers below are cleared.
+
+**Website:** [www.htreasure.com](https://www.htreasure.com)
 
 ## Included
 
+- HTREASURE LTD application design, shared with HT ISO Creator: blue header banner, File / Tools / Help menus, grouped sections, status bar, and a Light / Dark / Windows theme. HT ISO Ripper has its own logo.
 - Sector-exact ISO imaging of data CDs and DVDs, with read retries, safe cancellation and a choice of how to handle unreadable sectors.
 - SHA-256 hashing, structural verification and full verification against the source disc.
 - Honest handling of discs an ISO can't represent: audio, mixed-mode, multisession and copy-protected discs are refused with an explanation.

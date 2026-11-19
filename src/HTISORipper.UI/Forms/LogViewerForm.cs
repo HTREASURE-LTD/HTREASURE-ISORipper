@@ -20,6 +20,7 @@ namespace HTISORipper.UI.Forms
             _path = path;
             pathLabel.Text = path;
             LoadLog();
+            ThemeManager.Apply(this);
         }
 
         private void LoadLog()

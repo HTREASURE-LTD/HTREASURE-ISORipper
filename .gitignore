@@ -8,3 +8,5 @@ TestResults/
 installer/redist/
 /release/
 tests/installer/bin/
+# Local backup archives in the project root (never committed)
+/*.zip

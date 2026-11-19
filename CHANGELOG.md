@@ -1,6 +1,20 @@
 # Changelog
 
-## 1.0.0-stage1 – 2026-11-11
+## 1.0.0 – 2026-11-19
+
+### Changed
+- Applied the HTREASURE LTD application design template shared with HT ISO Creator: dark-blue header banner with the www.htreasure.com link, File / Tools / Help menus, grouped Source Drive, Image Options, Output Destination and Progress sections, a status bar, standard Windows buttons with one accent primary button, and Disc Information, Settings and About as separate windows.
+- New HT ISO Ripper logo and icon (disc with a "rip to image" arrow), distinct from HT ISO Creator's.
+
+### Added
+- Theme setting: Light, Dark or same as Windows (dark title bar on Windows 10 2004+ and 11).
+- Help menu opens the installed User Guide, Troubleshooting, Release Notes, Licence and Third-Party Notices.
+- Installer and Programs and Features list https://www.htreasure.com as the publisher website.
+
+### Fixed
+- Setup's Microsoft signature check could not run when Setup was started from a PowerShell 7 window (inherited module path). Setup now gives Windows PowerShell its own module path; a regression test covers it. This was the cause of the first CI failure.
+
+## 1.0.0 development stages – 2026-11-11
 
 ### Added
 - Stage 4: smart Inno Setup installer (online and offline) with Windows version, architecture and .NET detection, automatic net48/net461 and x86/x64 selection, consented download of Microsoft .NET from download.microsoft.com with SHA-256 and Authenticode verification, restart and resume, upgrade and uninstall handling. Pinned prerequisite manifest, 29 installer tests, release pipeline (package verification, portable ZIPs, SHA256SUMS, release manifest, signing hooks) and CI/release GitHub workflows.

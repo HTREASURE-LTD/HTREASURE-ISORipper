@@ -20,6 +20,7 @@ namespace HTISORipper.UI.Views
             this.publisherLabel = new System.Windows.Forms.Label();
             this.versionLabel = new System.Windows.Forms.Label();
             this.copyrightLabel = new System.Windows.Forms.Label();
+            this.websiteLinkLabel = new System.Windows.Forms.LinkLabel();
             this.noticeLabel = new System.Windows.Forms.Label();
             this.buttonPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.viewLogButton = new System.Windows.Forms.Button();
@@ -33,10 +34,10 @@ namespace HTISORipper.UI.Views
             // card
             //
             this.card.Controls.Add(this.layout);
-            this.card.Location = new System.Drawing.Point(16, 16);
+            this.card.Dock = System.Windows.Forms.DockStyle.Fill;
             this.card.Name = "card";
-            this.card.Padding = new System.Windows.Forms.Padding(24);
-            this.card.Size = new System.Drawing.Size(560, 400);
+            this.card.Padding = new System.Windows.Forms.Padding(20, 16, 20, 8);
+            this.card.BorderColor = System.Drawing.Color.Transparent;
             this.card.TabIndex = 0;
             //
             // layout
@@ -50,11 +51,13 @@ namespace HTISORipper.UI.Views
             this.layout.Controls.Add(this.publisherLabel, 0, 3);
             this.layout.Controls.Add(this.versionLabel, 0, 4);
             this.layout.Controls.Add(this.copyrightLabel, 0, 5);
-            this.layout.Controls.Add(this.noticeLabel, 0, 6);
-            this.layout.Controls.Add(this.buttonPanel, 0, 7);
+            this.layout.Controls.Add(this.websiteLinkLabel, 0, 6);
+            this.layout.Controls.Add(this.noticeLabel, 0, 7);
+            this.layout.Controls.Add(this.buttonPanel, 0, 8);
             this.layout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layout.Name = "layout";
-            this.layout.RowCount = 8;
+            this.layout.RowCount = 9;
+            this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -79,6 +82,7 @@ namespace HTISORipper.UI.Views
             this.productLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(61)))), ((int)(((byte)(145)))));
             this.productLabel.Margin = new System.Windows.Forms.Padding(0, 12, 0, 0);
             this.productLabel.Name = "productLabel";
+            this.productLabel.Tag = "accent";
             this.productLabel.Text = "HT ISO Ripper";
             //
             // taglineLabel
@@ -107,6 +111,15 @@ namespace HTISORipper.UI.Views
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Text = "© 2026 HTREASURE LTD";
             //
+            // websiteLinkLabel
+            //
+            this.websiteLinkLabel.AutoSize = true;
+            this.websiteLinkLabel.Margin = new System.Windows.Forms.Padding(0, 6, 0, 0);
+            this.websiteLinkLabel.Name = "websiteLinkLabel";
+            this.websiteLinkLabel.TabStop = true;
+            this.websiteLinkLabel.Text = "www.htreasure.com";
+            this.websiteLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.WebsiteLinkLabel_LinkClicked);
+            //
             // noticeLabel
             //
             this.noticeLabel.AutoSize = true;
@@ -114,6 +127,7 @@ namespace HTISORipper.UI.Views
             this.noticeLabel.Margin = new System.Windows.Forms.Padding(0, 14, 0, 0);
             this.noticeLabel.MaximumSize = new System.Drawing.Size(500, 0);
             this.noticeLabel.Name = "noticeLabel";
+            this.noticeLabel.Tag = "dim";
             //
             // buttonPanel
             //
@@ -148,7 +162,7 @@ namespace HTISORipper.UI.Views
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
             this.Controls.Add(this.card);
-            this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Name = "AboutView";
             this.Size = new System.Drawing.Size(780, 600);
             this.card.ResumeLayout(false);
@@ -168,6 +182,7 @@ namespace HTISORipper.UI.Views
         private System.Windows.Forms.Label publisherLabel;
         private System.Windows.Forms.Label versionLabel;
         private System.Windows.Forms.Label copyrightLabel;
+        private System.Windows.Forms.LinkLabel websiteLinkLabel;
         private System.Windows.Forms.Label noticeLabel;
         private System.Windows.Forms.FlowLayoutPanel buttonPanel;
         private System.Windows.Forms.Button viewLogButton;

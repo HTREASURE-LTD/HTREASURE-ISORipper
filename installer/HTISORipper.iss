@@ -1,4 +1,4 @@
-// HT ISO Ripper Setup (Inno Setup 6.3+; built and tested with 6.7).
+﻿// HT ISO Ripper Setup (Inno Setup 6.3+; built and tested with 6.7).
 //
 // One script produces both customer installers:
 //   ISCC HTISORipper.iss                 -> HT-ISO-Ripper-Setup-1.0.0.exe          (downloads .NET only if missing)
@@ -156,6 +156,12 @@ Source: "{#AppBin}x64\Release\net461\*"; Excludes: "*.pdb"; DestDir: "{app}"; Fl
 Source: "{#AppBin}x86\Release\net461\*"; Excludes: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion; Check: IsSelectedBuild('net461', 'x86')
 Source: "..\LICENSE"; DestDir: "{app}"; DestName: "LICENSE.txt"; Flags: ignoreversion
 Source: "PRIVACY.txt"; DestDir: "{app}"; Flags: ignoreversion
+; Documents opened from the Help menu.
+Source: "..\docs\USER_MANUAL.md"; DestDir: "{app}\Documentation"; DestName: "USER-GUIDE.md"; Flags: ignoreversion
+Source: "..\docs\release\TROUBLESHOOTING.md"; DestDir: "{app}\Documentation"; Flags: ignoreversion
+Source: "..\docs\release\RELEASE-NOTES.md"; DestDir: "{app}\Documentation"; Flags: ignoreversion
+Source: "..\docs\release\INSTALLATION.md"; DestDir: "{app}\Documentation"; Flags: ignoreversion
+Source: "..\docs\release\THIRD-PARTY-LICENSES.md"; DestDir: "{app}\Documentation"; Flags: ignoreversion
 #if Offline
 ; Bundled Microsoft redistributables: extracted to {tmp} only when needed, verified again before use.
 Source: "redist\{#NDP48_FILE}";  Flags: dontcopy nocompression

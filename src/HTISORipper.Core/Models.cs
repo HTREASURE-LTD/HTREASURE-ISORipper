@@ -11,7 +11,6 @@ namespace HTISORipper.Core
         public const string Description = "Professional CD/DVD to ISO Imaging and Backup Utility";
         public const string Copyright = "© 2026 HTREASURE LTD";
         public const string Version = "1.0.0";
-        public const string Stage = "Stage 1 build";
 #if NET461
         public const string RuntimeBuild = ".NET Framework 4.6.1 compatibility build";
 #else
@@ -184,6 +183,13 @@ namespace HTISORipper.Core
         Structural = 1,
         /// <summary>Structural checks plus re-reading every sector from the disc and comparing.</summary>
         FullSourceCompare = 2
+    }
+
+    public enum AppTheme
+    {
+        System = 0,
+        Light = 1,
+        Dark = 2
     }
 
     public enum ReadSpeedPreference

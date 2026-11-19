@@ -122,7 +122,7 @@ namespace HTISORipper.UI.Views
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
             this.Controls.Add(this.layout);
-            this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Name = "DiscInfoView";
             this.Size = new System.Drawing.Size(780, 600);
             this.layout.ResumeLayout(false);

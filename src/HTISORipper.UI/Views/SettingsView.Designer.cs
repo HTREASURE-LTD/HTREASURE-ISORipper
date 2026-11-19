@@ -30,6 +30,8 @@ namespace HTISORipper.UI.Views
             this.policyComboBox = new System.Windows.Forms.ComboBox();
             this.blockLabel = new System.Windows.Forms.Label();
             this.blockComboBox = new System.Windows.Forms.ComboBox();
+            this.themeLabel = new System.Windows.Forms.Label();
+            this.themeComboBox = new System.Windows.Forms.ComboBox();
             this.retentionLabel = new System.Windows.Forms.Label();
             this.retentionUpDown = new System.Windows.Forms.NumericUpDown();
             this.ejectCheckBox = new System.Windows.Forms.CheckBox();
@@ -67,13 +69,16 @@ namespace HTISORipper.UI.Views
             this.layout.Controls.Add(this.blockComboBox, 1, 7);
             this.layout.Controls.Add(this.retentionLabel, 0, 8);
             this.layout.Controls.Add(this.retentionUpDown, 1, 8);
-            this.layout.Controls.Add(this.ejectCheckBox, 1, 9);
-            this.layout.Controls.Add(this.buttonPanel, 1, 10);
-            this.layout.Controls.Add(this.statusLabel, 0, 11);
+            this.layout.Controls.Add(this.themeLabel, 0, 9);
+            this.layout.Controls.Add(this.themeComboBox, 1, 9);
+            this.layout.Controls.Add(this.ejectCheckBox, 1, 10);
+            this.layout.Controls.Add(this.buttonPanel, 1, 11);
+            this.layout.Controls.Add(this.statusLabel, 0, 12);
             this.layout.Dock = System.Windows.Forms.DockStyle.Top;
             this.layout.Name = "layout";
             this.layout.Padding = new System.Windows.Forms.Padding(16, 8, 16, 16);
-            this.layout.RowCount = 12;
+            this.layout.RowCount = 13;
+            this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.layout.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -128,6 +133,9 @@ namespace HTISORipper.UI.Views
             this.retentionLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.retentionLabel.AutoSize = true;
             this.retentionLabel.Text = "Keep log files (days)";
+            this.themeLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.themeLabel.AutoSize = true;
+            this.themeLabel.Text = "Theme";
             //
             // outputDirPanel
             //
@@ -185,6 +193,11 @@ namespace HTISORipper.UI.Views
             this.blockComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.blockComboBox.Name = "blockComboBox";
             this.blockComboBox.TabIndex = 6;
+            this.themeComboBox.AccessibleName = "Theme";
+            this.themeComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.themeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.themeComboBox.Name = "themeComboBox";
+            this.themeComboBox.TabIndex = 8;
             this.retentionUpDown.AccessibleName = "Keep log files (days)";
             this.retentionUpDown.Maximum = new decimal(new int[] { 3650, 0, 0, 0 });
             this.retentionUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
@@ -243,7 +256,7 @@ namespace HTISORipper.UI.Views
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(246)))), ((int)(((byte)(250)))));
             this.Controls.Add(this.layout);
-            this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Name = "SettingsView";
             this.Size = new System.Drawing.Size(780, 600);
             this.layout.ResumeLayout(false);
@@ -276,6 +289,8 @@ namespace HTISORipper.UI.Views
         private System.Windows.Forms.ComboBox policyComboBox;
         private System.Windows.Forms.Label blockLabel;
         private System.Windows.Forms.ComboBox blockComboBox;
+        private System.Windows.Forms.Label themeLabel;
+        private System.Windows.Forms.ComboBox themeComboBox;
         private System.Windows.Forms.Label retentionLabel;
         private System.Windows.Forms.NumericUpDown retentionUpDown;
         private System.Windows.Forms.CheckBox ejectCheckBox;

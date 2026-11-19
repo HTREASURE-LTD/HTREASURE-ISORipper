@@ -10,7 +10,7 @@ Counts are rows in the tables below. A row that passed automated checks but stil
 
 | Status | Count |
 |---|---|
-| Passed | 16 |
+| Passed | 17 |
 | Failed | 0 |
 | Blocked | 24 |
 | Not tested | 0 |
@@ -24,7 +24,7 @@ Counts are rows in the tables below. A row that passed automated checks but stil
 |---|---|
 | Unit tests on the net48 build (mock disc engine) | Passed: 51/51 |
 | Unit tests on the net461 libraries (run under net462) | Passed: 51/51 |
-| Installer decision and verification tests (real `decision.iss`, run through a compiled harness) | Passed: 29/29 |
+| Installer decision and verification tests (real `decision.iss`, run through a compiled harness) | Passed: 30/30 |
 | Hardware integration tests | Blocked: no optical drive (3 skipped) |
 
 ## Build and packaging
@@ -63,6 +63,7 @@ Counts are rows in the tables below. A row that passed automated checks but stil
 | I19 | Uninstall: files, shortcuts and registration removed; settings kept unless chosen; disc images untouched | **Blocked:** needs installation (I8) |
 | I20 | Reinstallation after uninstall | **Blocked:** as I19 |
 | I21 | Silent install refuses to download prerequisites | **Blocked:** manual |
+| I22 | Signature check still works when Setup is started from a PowerShell 7 window | Passed (regression test; reproduced and fixed locally) |
 
 ## Windows compatibility
 

@@ -32,6 +32,9 @@ namespace HTISORipper.UI.Views
             blockComboBox.Items.Add(new ComboItem<int>("16 sectors (32 KB) - most compatible", 16));
             blockComboBox.Items.Add(new ComboItem<int>("32 sectors (64 KB) - default", 32));
             blockComboBox.Items.Add(new ComboItem<int>("64 sectors (128 KB) - fastest on modern drives", 64));
+            themeComboBox.Items.Add(new ComboItem<AppTheme>("Same as Windows", AppTheme.System));
+            themeComboBox.Items.Add(new ComboItem<AppTheme>("Light", AppTheme.Light));
+            themeComboBox.Items.Add(new ComboItem<AppTheme>("Dark", AppTheme.Dark));
         }
 
         internal void Initialize(AppServices services)
@@ -54,6 +57,7 @@ namespace HTISORipper.UI.Views
             Select(speedComboBox, s.ReadSpeed);
             Select(policyComboBox, s.ErrorPolicy);
             Select(blockComboBox, s.ReadBlockSectors);
+            Select(themeComboBox, s.Theme);
             retriesUpDown.Value = Math.Max(retriesUpDown.Minimum, Math.Min(retriesUpDown.Maximum, s.MaxReadRetries));
             retentionUpDown.Value = Math.Max(retentionUpDown.Minimum, Math.Min(retentionUpDown.Maximum, s.LogRetentionDays));
             ejectCheckBox.Checked = s.EjectAfterSuccess;
@@ -75,6 +79,7 @@ namespace HTISORipper.UI.Views
             s.ReadSpeed = Value<ReadSpeedPreference>(speedComboBox);
             s.ErrorPolicy = Value<ErrorPolicy>(policyComboBox);
             s.ReadBlockSectors = Value<int>(blockComboBox);
+            s.Theme = Value<AppTheme>(themeComboBox);
             s.MaxReadRetries = (int)retriesUpDown.Value;
             s.LogRetentionDays = (int)retentionUpDown.Value;
             s.EjectAfterSuccess = ejectCheckBox.Checked;
@@ -83,7 +88,7 @@ namespace HTISORipper.UI.Views
                 _services.SettingsStore.Save(s);
                 _services.Log.Info("Settings saved.");
                 statusLabel.Text = "Settings saved.";
-                statusLabel.ForeColor = Theme.Success;
+                statusLabel.ForeColor = ThemeManager.Current.SuccessText;
                 var handler = SettingsSaved;
                 if (handler != null) handler(this, EventArgs.Empty);
             }
@@ -92,7 +97,7 @@ namespace HTISORipper.UI.Views
                 if (!(ex is IOException) && !(ex is UnauthorizedAccessException) && !(ex is InvalidOperationException)) throw;
                 _services.Log.Error("Saving settings failed", ex);
                 statusLabel.Text = "Settings could not be saved: " + ex.Message;
-                statusLabel.ForeColor = Theme.Error;
+                statusLabel.ForeColor = ThemeManager.Current.ErrorText;
             }
         }
 
@@ -100,7 +105,7 @@ namespace HTISORipper.UI.Views
         {
             Show(new AppSettings());
             statusLabel.Text = "Defaults restored. Click Save to keep them.";
-            statusLabel.ForeColor = Theme.Muted;
+            statusLabel.ForeColor = ThemeManager.Current.DimText;
         }
 
         private void BrowseButton_Click(object sender, EventArgs e)

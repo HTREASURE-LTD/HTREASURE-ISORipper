@@ -224,6 +224,9 @@ end;
 
 // ---------------------------------------------------------------- package verification
 
+function SetEnvironmentVariable(Name, Value: String): Boolean;
+  external 'SetEnvironmentVariableW@kernel32.dll stdcall';
+
 // Authenticode check of a downloaded/bundled Microsoft package using Windows' own Get-AuthenticodeSignature
 // (PowerShell 2.0+ ships with Windows 7 SP1 and later).
 // Returns: 0 = valid signature from ExpectedOrg
@@ -246,7 +249,13 @@ begin
   StringChangeEx(PsFile, '''', '''''', True);
   PsOut := OutFile;
   StringChangeEx(PsOut, '''', '''''', True);
-  Cmd := '-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "& { $s = Get-AuthenticodeSignature -LiteralPath '''
+  // When Setup is started from a PowerShell 7 window, the inherited PSModulePath points at PowerShell 7 modules,
+  // which Windows PowerShell 5.1 cannot load, so Get-AuthenticodeSignature would be missing. Give the child
+  // process Windows PowerShell's own module folder only. (-ExecutionPolicy is deliberately not passed: it would
+  // load the security module from the inherited path at startup, and execution policy does not apply to -Command.)
+  SetEnvironmentVariable('PSModulePath', ExpandConstant('{sys}\WindowsPowerShell\v1.0\Modules'));
+  Cmd := '-NoProfile -NonInteractive -Command "& { '
+    + '$s = Get-AuthenticodeSignature -LiteralPath '''
     + PsFile + '''; $sub = ''''; if ($s.SignerCertificate) { $sub = $s.SignerCertificate.Subject }; '
     + '[IO.File]::WriteAllText(''' + PsOut + ''', $s.Status.ToString() + ''|'' + $sub) }"';
   if not Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'), Cmd, '', SW_HIDE, ewWaitUntilTerminated, Code) then exit;
