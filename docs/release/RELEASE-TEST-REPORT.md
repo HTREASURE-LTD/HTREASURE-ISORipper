@@ -1,6 +1,6 @@
 # HT ISO Ripper 1.0.0 – Release Test Report
 
-Test environment: Windows 11 build 26300 x64, .NET Framework 4.8.1, Inno Setup 6.7. No optical drive, no Windows 7/8/8.1/10 machines or VMs, and not elevated (no UAC approval possible).
+Test environment: Windows 11 build 26300 x64, .NET Framework 4.8.1, Inno Setup 6.7. No optical drive, no Windows 7/8/8.1/10 machines or VMs, and not elevated (no UAC approval possible). Installer end-to-end tests also run in CI on clean Windows Server 2022 runners.
 
 **Status key:** Passed (how verified) · Failed · Blocked (cannot run here, and why) · Not tested · N/A
 
@@ -10,9 +10,9 @@ Counts are rows in the tables below. A row that passed automated checks but stil
 
 | Status | Count |
 |---|---|
-| Passed | 17 |
+| Passed | 22 |
 | Failed | 0 |
-| Blocked | 24 |
+| Blocked | 20 |
 | Not tested | 0 |
 | N/A (Stage 3 not implemented) | 3 |
 
@@ -49,8 +49,8 @@ Counts are rows in the tables below. A row that passed automated checks but stil
 | I5 | Real detection matches this PC (OS, architecture, .NET release) | Passed |
 | I6 | Corrupted download rejected (SHA-256); unsigned package or wrong publisher rejected | Passed (PackageVerificationTests) |
 | I7 | Wizard pages: Welcome, Licence, Privacy, Compatibility, Prerequisites (consent gate), Location, Tasks, Ready | Passed (preview build, simulated Windows 8 x86; Next stays disabled until consent is given) |
-| I8 | Clean installation on Windows 11 | **Blocked:** needs UAC approval; run manually |
-| I9 | Installation with all prerequisites present | **Blocked:** as I8 |
+| I8 | Clean installation (silent, administrator) | Passed: CI end-to-end test on clean Windows Server 2022, run 44644917111, 33/33 checks |
+| I9 | Installation with all prerequisites present | Passed: same run; no download, correct net48 x64 build, program starts |
 | I10 | Installation with a missing prerequisite (download, verify, install .NET) | **Blocked:** needs a VM without .NET 4.8 |
 | I11 | Failed / interrupted download, then retry | **Blocked:** needs a VM; manual procedure in WINDOWS-TEST-MATRIX.md |
 | I12 | No internet connection: offline guidance shown | **Blocked:** needs a VM |
@@ -60,8 +60,8 @@ Counts are rows in the tables below. A row that passed automated checks but stil
 | I16 | Restart required after .NET, then resume after sign-in | **Blocked:** needs a VM |
 | I17 | Installation cancellation | **Blocked:** manual |
 | I18 | Upgrade over a previous version; downgrade refused | **Blocked:** no earlier released version exists yet; downgrade logic Passed (version comparison test) |
-| I19 | Uninstall: files, shortcuts and registration removed; settings kept unless chosen; disc images untouched | **Blocked:** needs installation (I8) |
-| I20 | Reinstallation after uninstall | **Blocked:** as I19 |
+| I19 | Uninstall: files, shortcuts and registration removed; .NET untouched | Passed: same run (silent uninstall; the settings prompt is skipped in silent mode by design) |
+| I20 | Reinstallation in place | Passed: same run (exit 0, one Programs and Features entry, same folder) |
 | I21 | Silent install refuses to download prerequisites | **Blocked:** manual |
 | I22 | Signature check still works when Setup is started from a PowerShell 7 window | Passed (regression test; reproduced and fixed locally) |
 
@@ -70,6 +70,7 @@ Counts are rows in the tables below. A row that passed automated checks but stil
 | # | System | Status |
 |---|---|---|
 | W1 | Windows 11 x64: application starts (net48 and net461 builds) | Passed (Stage 1/2 smoke tests) |
+| W6 | Windows Server 2022 (Windows 10 21H2 core) x64: real install, start, reinstall, uninstall | Passed: CI end-to-end test, 33/33 checks |
 | W2 | Windows 10 x86/x64 | **Blocked:** no VM |
 | W3 | Windows 8.1 x86/x64 | **Blocked:** no VM |
 | W4 | Windows 8.0 x86 and x64 with .NET 4.6.1 | **Blocked:** no VM. Not validated; do not claim Windows 8 compatibility until WINDOWS-TEST-MATRIX.md section W8 passes. |
