@@ -1,4 +1,4 @@
-# Release Checklist – HT ISO Ripper 1.0.0
+# Release Checklist – HT ISO Ripper 1.0.1
 
 Each item needs a name and date. **Do not publish until every box is ticked.**
 

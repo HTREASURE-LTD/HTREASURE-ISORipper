@@ -1,4 +1,4 @@
-# HT ISO Ripper 1.0.0 – User Guide
+# HT ISO Ripper 1.0.1 – User Guide
 
 HT ISO Ripper creates exact ISO disc images from data CDs and DVDs. It reads discs **read-only**, needs no administrator rights and no internet connection.
 

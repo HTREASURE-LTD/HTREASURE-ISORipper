@@ -1,6 +1,6 @@
 # HT ISO Ripper
 
-**Professional CD/DVD to ISO Imaging and Backup Utility** · HTREASURE LTD · Version 1.0.0 (Stages 1 and 4; Stage 3 pending)
+**Professional CD/DVD to ISO Imaging and Backup Utility** · HTREASURE LTD · Version 1.0.1 (pre-release; Stage 3 pending)
 
 HT ISO Ripper reads data CDs and DVDs sector by sector, through documented Windows device interfaces, into standard ISO images. It verifies each image against the disc and never presents a damaged or partial image as a good backup.
 

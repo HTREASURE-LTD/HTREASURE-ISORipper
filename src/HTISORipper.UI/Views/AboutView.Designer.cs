@@ -103,7 +103,7 @@ namespace HTISORipper.UI.Views
             //
             this.versionLabel.AutoSize = true;
             this.versionLabel.Name = "versionLabel";
-            this.versionLabel.Text = "Version 1.0.0";
+            this.versionLabel.Text = "Version";
             //
             // copyrightLabel
             //

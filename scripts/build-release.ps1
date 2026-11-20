@@ -25,7 +25,7 @@
       $env:SIGNTOOL_PATH       optional path to signtool.exe (Windows SDK, x64)
 #>
 param(
-    [string]$Version = '1.0.0',
+    [string]$Version = '1.0.1',
     [switch]$SkipTests,
     [string]$Root = (Split-Path -Parent $PSScriptRoot)
 )

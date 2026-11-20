@@ -1,11 +1,11 @@
-# Installing HT ISO Ripper 1.0.0
+# Installing HT ISO Ripper 1.0.1
 
 ## Which file do I need?
 
 | File | Use it when |
 |---|---|
-| `HT-ISO-Ripper-Setup-1.0.0.exe` (about 2 MB) | The computer has internet access. Microsoft .NET Framework is downloaded only if it is missing. |
-| `HT-ISO-Ripper-Offline-Setup-1.0.0.exe` (about 180 MB) | The computer has no internet access, or a secure connection to Microsoft is not possible (common on old Windows 7 systems). |
+| `HT-ISO-Ripper-Setup-1.0.1.exe` (about 2 MB) | The computer has internet access. Microsoft .NET Framework is downloaded only if it is missing. |
+| `HT-ISO-Ripper-Offline-Setup-1.0.1.exe` (about 180 MB) | The computer has no internet access, or a secure connection to Microsoft is not possible (common on old Windows 7 systems). |
 
 You don't need to know your Windows version, 32/64-bit architecture or .NET Framework version. Setup detects them and picks the right build for you.
 
@@ -36,7 +36,7 @@ Setup needs administrator rights to install into Program Files and to install .N
 ## Silent installation (IT administrators)
 
 ```bash
-HT-ISO-Ripper-Setup-1.0.0.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /LOG="%TEMP%\htisoripper-setup.log"
+HT-ISO-Ripper-Setup-1.0.1.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /LOG="%TEMP%\htisoripper-setup.log"
 ```
 
 Silent installs never download prerequisites, because no one has given consent. Install .NET Framework first (4.8, or 4.6.1 on Windows 8) with your normal software-deployment tools, then run Setup. If the prerequisite is missing, Setup stops with an error and the log explains why.

@@ -44,7 +44,7 @@ All signatures use SHA-256 and an RFC 3161 timestamp, so they stay valid after t
 ## Checking a signed release
 
 ```bash
-signtool verify /pa /v HT-ISO-Ripper-Setup-1.0.0.exe
+signtool verify /pa /v HT-ISO-Ripper-Setup-1.0.1.exe
 ```
 
 Or: right-click the file → Properties → Digital Signatures → *HTREASURE LTD*.

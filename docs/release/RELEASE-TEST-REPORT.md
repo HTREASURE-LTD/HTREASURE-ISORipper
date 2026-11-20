@@ -1,4 +1,4 @@
-# HT ISO Ripper 1.0.0 – Release Test Report
+# HT ISO Ripper 1.0.1 – Release Test Report
 
 Test environment: Windows 11 build 26300 x64, .NET Framework 4.8.1, Inno Setup 6.7. No optical drive, no Windows 7/8/8.1/10 machines or VMs, and not elevated (no UAC approval possible). Installer end-to-end tests also run in CI on clean Windows Server 2022 runners.
 

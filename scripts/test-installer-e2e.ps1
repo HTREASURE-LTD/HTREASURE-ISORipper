@@ -6,7 +6,7 @@
 
 .DESCRIPTION
     Run from an elevated (Run as administrator) PowerShell:
-        powershell -ExecutionPolicy Bypass -File test-installer-e2e.ps1 -Setup .\HT-ISO-Ripper-Setup-1.0.0.exe
+        powershell -ExecutionPolicy Bypass -File test-installer-e2e.ps1 -Setup .\HT-ISO-Ripper-Setup-1.0.1.exe
 
     The silent install never downloads Microsoft .NET (no one can consent), so on a PC without the required
     .NET Framework the install step is expected to fail, and the report says so. Use -Interactive to run the
@@ -97,6 +97,8 @@ $is64 = [Environment]::GetEnvironmentVariable('PROCESSOR_ARCHITEW6432') -or ([In
 $ver = [Version]$os.Version
 $isWin8 = ($ver.Major -eq 6 -and $ver.Minor -eq 2 -and $os.ProductType -eq 1)
 if ($isWin8) { $expectedSku = 'v4.6.1'; $needed = 394254 } else { $expectedSku = 'v4.8'; $needed = 528040 }
+# Setup's own product version (for example 1.0.1) is what Programs and Features must show.
+$expectedVersion = (Get-Item $Setup).VersionInfo.ProductVersion
 
 $header = @(
     'HT ISO Ripper - end-to-end installer test',
@@ -124,7 +126,7 @@ Add-Result 'Install' ($code -eq 0) "exit code $code; log $setupLog"
 $entry = Get-UninstallEntry
 Add-Result 'Registered in Programs and Features' ($entry -ne $null) $AppId
 if ($entry -eq $null) { $results | Out-File -Encoding UTF8 $Report; exit 1 }
-Add-Result 'Display version 1.0.0' ($entry.DisplayVersion -eq '1.0.0') $entry.DisplayVersion
+Add-Result "Display version $expectedVersion" ($entry.DisplayVersion -eq $expectedVersion) $entry.DisplayVersion
 Add-Result 'Publisher HTREASURE LTD' ($entry.Publisher -eq 'HTREASURE LTD') $entry.Publisher
 Add-Result 'Publisher website' ($entry.URLInfoAbout -eq 'https://www.htreasure.com') $entry.URLInfoAbout
 

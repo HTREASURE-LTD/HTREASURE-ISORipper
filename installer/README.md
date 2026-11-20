@@ -4,8 +4,8 @@ Inno Setup 6.3+ script (built and tested with 6.7) that produces both customer i
 
 | Output | Command |
 |---|---|
-| `release\v1.0.0\online\HT-ISO-Ripper-Setup-1.0.0.exe` | `ISCC installer\HTISORipper.iss` |
-| `release\v1.0.0\offline\HT-ISO-Ripper-Offline-Setup-1.0.0.exe` | `ISCC /DOffline=1 installer\HTISORipper.iss` |
+| `release\v1.0.1\online\HT-ISO-Ripper-Setup-1.0.1.exe` | `ISCC installer\HTISORipper.iss` |
+| `release\v1.0.1\offline\HT-ISO-Ripper-Offline-Setup-1.0.1.exe` | `ISCC /DOffline=1 installer\HTISORipper.iss` |
 
 Normally run `scripts\build-release.ps1`, which builds and verifies the application first.
 
@@ -28,7 +28,7 @@ ISCC /DPreview=1 installer\HTISORipper.iss
 ```
 
 ```bash
-HT-ISO-Ripper-Setup-1.0.0.exe /simmajor=6 /simminor=2 /simbuild=9200 /simx64=0 /simrelease=0
+HT-ISO-Ripper-Setup-1.0.1.exe /simmajor=6 /simminor=2 /simbuild=9200 /simx64=0 /simrelease=0
 ```
 
 See docs\INSTALLER-DESIGN.md, docs\PREREQUISITES.md and docs\OFFLINE-INSTALLATION.md.

@@ -56,7 +56,7 @@ Also needs **Inno Setup 6.3+** (built and tested with 6.7), from jrsoftware.org 
 powershell -File scripts/build-release.ps1
 ```
 
-The script runs all tests, builds the four configurations, verifies each package (exact files, all managed code, correct runtime config), verifies the pinned Microsoft prerequisites, signs (if configured), compiles the online and offline installers, and writes portable ZIPs, documentation, `SHA256SUMS.txt` and `release-manifest.json` to `release\v1.0.0\`.
+The script runs all tests, builds the four configurations, verifies each package (exact files, all managed code, correct runtime config), verifies the pinned Microsoft prerequisites, signs (if configured), compiles the online and offline installers, and writes portable ZIPs, documentation, `SHA256SUMS.txt` and `release-manifest.json` to `release\v1.0.1\`.
 
 The first time on a new machine, the offline installer needs the Microsoft packages in `installer\redist`. Verify mode downloads them from the pinned URLs and checks them:
 

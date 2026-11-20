@@ -1,14 +1,14 @@
 ﻿// HT ISO Ripper Setup (Inno Setup 6.3+; built and tested with 6.7).
 //
 // One script produces both customer installers:
-//   ISCC HTISORipper.iss                 -> HT-ISO-Ripper-Setup-1.0.0.exe          (downloads .NET only if missing)
-//   ISCC /DOffline=1 HTISORipper.iss     -> HT-ISO-Ripper-Offline-Setup-1.0.0.exe  (.NET installers bundled)
+//   ISCC HTISORipper.iss                 -> HT-ISO-Ripper-Setup-<version>.exe       (downloads .NET only if missing)
+//   ISCC /DOffline=1 HTISORipper.iss     -> HT-ISO-Ripper-Offline-Setup-<version>.exe  (.NET installers bundled)
 // Normally run through scripts\build-release.ps1, which builds the application first.
 //
 // Setup is a native program: it runs on a computer with no .NET Framework at all.
 
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.0.1"
 #endif
 #ifndef Offline
   #define Offline 0

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.1 – 2026-11-20
+
+### Changed
+- LICENSE: the HTREASURE LTD End-User Licence Agreement (adapted from HT ISO Creator) replaces the placeholder. It is shown by Setup and installed as LICENSE.txt.
+
+### Added
+- scripts/test-installer-e2e.ps1: real install, file, registration, build and architecture checks, program start-up, reinstall and uninstall. Runs in CI on a clean Windows Server 2022 machine (33/33 checks) and on tester PCs (PowerShell 2.0 compatible).
+- Azure Artifact Signing support in the release build (alongside OV/EV certificates); docs/CODE-SIGNING.md.
+
+### Fixed
+- Setup signing command: arguments with spaces ("HT ISO Ripper", tool paths) are now quoted for Inno Setup.
+
 ## 1.0.0 – 2026-11-20
 
 ### Changed

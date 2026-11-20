@@ -1,6 +1,6 @@
 # Offline Installation
 
-## HT-ISO-Ripper-Offline-Setup-1.0.0.exe
+## HT-ISO-Ripper-Offline-Setup-1.0.1.exe
 
 - Contains both application builds (x86/x64) and Microsoft's .NET Framework 4.8 and 4.6.1 offline installers.
 - Needs no internet connection at any point.
@@ -25,7 +25,7 @@ The Microsoft .NET Framework offline installers are designed for redistribution 
    certutil -hashfile NDP48-x86-x64-AllOS-ENU.exe SHA256
    ```
 3. Copy it to the offline computer, run it, and restart if asked.
-4. Run `HT-ISO-Ripper-Setup-1.0.0.exe`. It detects .NET and downloads nothing.
+4. Run `HT-ISO-Ripper-Setup-1.0.1.exe`. It detects .NET and downloads nothing.
 
 ## Windows 7 note
 

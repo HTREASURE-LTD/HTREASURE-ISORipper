@@ -1,6 +1,6 @@
 # HT ISO Ripper – Architecture and Technical Decisions
 
-HTREASURE LTD · Version 1.0.0 · Stage 1
+HTREASURE LTD · Version 1.0.1
 
 ## 1. Disc-access approach (evaluation)
 

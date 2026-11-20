@@ -17,7 +17,7 @@ It then reinstalls in place and uninstalls, checking that nothing is left behind
 From an elevated PowerShell on the test PC or VM, with the Setup file copied next to the script:
 
 ```bash
-powershell -ExecutionPolicy Bypass -File test-installer-e2e.ps1 -Setup HT-ISO-Ripper-Setup-1.0.0.exe
+powershell -ExecutionPolicy Bypass -File test-installer-e2e.ps1 -Setup HT-ISO-Ripper-Setup-1.0.1.exe
 ```
 
 Add `-Interactive` to click through the real wizard instead, which is needed when .NET is missing: silent installs never download it. Attach the generated `HTISORipper-e2e-report.txt` to RELEASE-TEST-REPORT.md.

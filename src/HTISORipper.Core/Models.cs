@@ -10,7 +10,7 @@ namespace HTISORipper.Core
         public const string Tagline = "Professional Disc Imaging Software";
         public const string Description = "Professional CD/DVD to ISO Imaging and Backup Utility";
         public const string Copyright = "© 2026 HTREASURE LTD";
-        public const string Version = "1.0.0";
+        public const string Version = "1.0.1";
 #if NET461
         public const string RuntimeBuild = ".NET Framework 4.6.1 compatibility build";
 #else

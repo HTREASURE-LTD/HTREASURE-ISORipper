@@ -61,7 +61,8 @@ jobs:
       - name: Install, start, reinstall and uninstall (Windows PowerShell 5.1, as a tester would)
         shell: powershell
         run: |
-          .\scripts\test-installer-e2e.ps1 -Setup release\ci\online\HT-ISO-Ripper-Setup-1.0.0.exe -Report e2e-report.txt
+          $setup = (Get-ChildItem release\ci\online\HT-ISO-Ripper-Setup-*.exe | Select-Object -First 1).FullName
+          .\scripts\test-installer-e2e.ps1 -Setup $setup -Report e2e-report.txt
           exit $LASTEXITCODE
 
       - uses: actions/upload-artifact@v4
