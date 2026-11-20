@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 – 2026-11-19
+## 1.0.0 – 2026-11-20
 
 ### Changed
 - Applied the HTREASURE LTD application design template shared with HT ISO Creator: dark-blue header banner with the www.htreasure.com link, File / Tools / Help menus, grouped Source Drive, Image Options, Output Destination and Progress sections, a status bar, standard Windows buttons with one accent primary button, and Disc Information, Settings and About as separate windows.

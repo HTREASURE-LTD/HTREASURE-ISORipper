@@ -1,6 +1,6 @@
 # HT ISO Ripper 1.0.0 – Release Notes
 
-**Status: pre-release** (published 2026-11-19 for HTREASURE LTD internal testing). It becomes a full release once the blockers below are cleared.
+**Status: pre-release** (published 2026-11-20 for HTREASURE LTD internal testing). It becomes a full release once the blockers below are cleared.
 
 **Website:** [www.htreasure.com](https://www.htreasure.com)
 
