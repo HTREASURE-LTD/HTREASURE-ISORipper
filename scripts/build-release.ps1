@@ -11,10 +11,18 @@
     6. Compiles the online and offline installers with Inno Setup.
     7. Creates portable ZIPs, copies release documentation, writes SHA256SUMS.txt and release-manifest.json.
 
-    Code signing (optional; without it the release is marked UNSIGNED, which is a release blocker):
+    Code signing (optional; without it the release is marked UNSIGNED, which is a release blocker).
+    Route A - certificate in the Windows certificate store (OV/EV certificate from a commercial CA):
       $env:HT_SIGN_THUMBPRINT  SHA-1 thumbprint of HTREASURE LTD's code-signing certificate in the user/machine store
       $env:HT_TIMESTAMP_URL    RFC 3161 timestamp server URL of the certificate authority
-      $env:SIGNTOOL_PATH       optional path to signtool.exe (Windows SDK)
+    Route B - Azure Artifact Signing (formerly Trusted Signing; see docs\CODE-SIGNING.md):
+      $env:HT_ARTIFACT_SIGNING_ENDPOINT  e.g. https://weu.codesigning.azure.net/
+      $env:HT_ARTIFACT_SIGNING_ACCOUNT   Artifact Signing account name
+      $env:HT_ARTIFACT_SIGNING_PROFILE   certificate profile name
+      $env:HT_ARTIFACT_SIGNING_DLIB      path to Azure.CodeSigning.Dlib.dll (x64) from Microsoft's signing client
+      Sign-in: Azure CLI (az login) locally, or AZURE_CLIENT_ID/AZURE_TENANT_ID/AZURE_CLIENT_SECRET in CI.
+    Both routes:
+      $env:SIGNTOOL_PATH       optional path to signtool.exe (Windows SDK, x64)
 #>
 param(
     [string]$Version = '1.0.0',
@@ -38,13 +46,27 @@ function Invoke-Checked([string]$exe, [string[]]$arguments) {
 }
 
 $iscc = Find-Iscc
-$signing = [bool]$env:HT_SIGN_THUMBPRINT
+$useArtifactSigning = [bool]$env:HT_ARTIFACT_SIGNING_ACCOUNT
+$signing = [bool]$env:HT_SIGN_THUMBPRINT -or $useArtifactSigning
 if ($signing) {
-    if (-not $env:HT_TIMESTAMP_URL) { throw 'HT_TIMESTAMP_URL must be set when signing.' }
     $signtool = $env:SIGNTOOL_PATH
     if (-not $signtool) { $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" -ErrorAction SilentlyContinue | Sort-Object FullName -Descending | Select-Object -First 1 -ExpandProperty FullName }
     if (-not $signtool) { throw 'signtool.exe not found (install the Windows SDK or set SIGNTOOL_PATH).' }
-    $signArgs = @('sign', '/sha1', $env:HT_SIGN_THUMBPRINT, '/fd', 'SHA256', '/tr', $env:HT_TIMESTAMP_URL, '/td', 'SHA256', '/d', 'HT ISO Ripper')
+    if ($useArtifactSigning) {
+        foreach ($v in 'HT_ARTIFACT_SIGNING_ENDPOINT', 'HT_ARTIFACT_SIGNING_PROFILE', 'HT_ARTIFACT_SIGNING_DLIB') {
+            if (-not [Environment]::GetEnvironmentVariable($v)) { throw "$v must be set for Azure Artifact Signing." }
+        }
+        if (-not (Test-Path $env:HT_ARTIFACT_SIGNING_DLIB)) { throw "Azure.CodeSigning.Dlib.dll not found at $env:HT_ARTIFACT_SIGNING_DLIB" }
+        $metadata = Join-Path $env:TEMP 'htisoripper-artifact-signing.json'
+        [ordered]@{ Endpoint = $env:HT_ARTIFACT_SIGNING_ENDPOINT; CodeSigningAccountName = $env:HT_ARTIFACT_SIGNING_ACCOUNT
+                    CertificateProfileName = $env:HT_ARTIFACT_SIGNING_PROFILE } | ConvertTo-Json | Set-Content -Encoding UTF8 $metadata
+        # Microsoft's documented signtool invocation for Artifact Signing (its own timestamp service).
+        $signArgs = @('sign', '/fd', 'SHA256', '/tr', 'http://timestamp.acs.microsoft.com', '/td', 'SHA256', '/d', 'HT ISO Ripper',
+                      '/dlib', $env:HT_ARTIFACT_SIGNING_DLIB, '/dmdf', $metadata)
+    } else {
+        if (-not $env:HT_TIMESTAMP_URL) { throw 'HT_TIMESTAMP_URL must be set when signing with a certificate thumbprint.' }
+        $signArgs = @('sign', '/sha1', $env:HT_SIGN_THUMBPRINT, '/fd', 'SHA256', '/tr', $env:HT_TIMESTAMP_URL, '/td', 'SHA256', '/d', 'HT ISO Ripper')
+    }
 }
 
 if (-not $SkipTests) {
@@ -96,14 +118,16 @@ if ($signing) {
         Invoke-Checked $signtool ($signArgs + $targets)
     }
 } else {
-    Write-Warning 'HT_SIGN_THUMBPRINT not set: building UNSIGNED installers (release blocker for public distribution).'
+    Write-Warning 'No signing configured (HT_SIGN_THUMBPRINT or HT_ARTIFACT_SIGNING_*): building UNSIGNED installers.'
 }
 
 Step 'Compiling installers'
 if (Test-Path $out) { Remove-Item -Recurse -Force $out }
 $isccBase = @('/Q', "/DOutputRoot=$out", "/DAppVersion=$Version")
 if ($signing) {
-    $isccBase += "/Shtsign=`"$signtool`" $($signArgs -join ' ') `$f"
+    # Inno Setup sign-tool command: $q is a quote character and $f the (already quoted) file to sign.
+    $innoArgs = foreach ($a in $signArgs) { if ($a -match '\s') { '$q' + $a + '$q' } else { $a } }
+    $isccBase += '/Shtsign=$q' + $signtool + '$q ' + ($innoArgs -join ' ') + ' $f'
     $isccBase += '/DSignTool=htsign'
 }
 Invoke-Checked $iscc ($isccBase + @('installer\HTISORipper.iss'))

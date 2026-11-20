@@ -5,7 +5,7 @@ Each item needs a name and date. **Do not publish until every box is ticked.**
 ## Content
 - [ ] Version set in `Directory.Build.props`, `AppInfo.Version` and the `release.yml` input
 - [ ] CHANGELOG.md and docs/release/RELEASE-NOTES.md final
-- [ ] LICENSE replaced with the approved HTREASURE LTD licence text (currently a placeholder)
+- [x] LICENSE replaced with the HTREASURE LTD EULA (adapted from HT ISO Creator, 2026-11-20); legal review recommended
 - [ ] Official logo and icon in `assets/`; then `scripts/generate-installer-images.ps1`
 - [ ] Publisher website and support details in `installer/branding.iss` (empty values are hidden)
 - [ ] Redistribution of the Microsoft .NET offline installers confirmed (or the offline installer withdrawn)

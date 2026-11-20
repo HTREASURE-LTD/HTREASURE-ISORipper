@@ -25,6 +25,6 @@ Stage 3 features are not implemented yet: lossless compression (.iso.gz/.iso.xz)
 ## Release blockers
 
 See testing/RELEASE-TEST-REPORT.md for the full list. In short:
-1. Code-signing certificate for HTREASURE LTD (installers and binaries are currently unsigned).
-2. Approved licence text (LICENSE is a placeholder) and official support/website details.
+1. Code-signing certificate for HTREASURE LTD (installers and binaries are currently unsigned; the build pipeline is ready, see CODE-SIGNING.md).
+2. Done: the HTREASURE LTD End-User Licence Agreement (adapted from HT ISO Creator) is now included.
 3. Tests on real optical drives and on Windows 7, 8 (x86/x64), 8.1 and 10, which are still pending.

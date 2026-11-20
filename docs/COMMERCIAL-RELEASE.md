@@ -4,11 +4,11 @@ These items need decisions or documents from HTREASURE LTD. Engineering can't co
 
 | # | Item | Why it blocks release | What is needed |
 |---|---|---|---|
-| 1 | **Authenticode code-signing certificate** issued to HTREASURE LTD (OV or EV) | Unsigned installers trigger SmartScreen "Unknown publisher" warnings and look untrustworthy | Certificate (EV recommended for immediate SmartScreen reputation) plus the CA's timestamp URL. Then set `HT_SIGN_THUMBPRINT` and `HT_TIMESTAMP_URL` locally, or the `HT_SIGN_PFX_BASE64` / `HT_SIGN_PFX_PASSWORD` secrets and the `HT_TIMESTAMP_URL` variable in GitHub. EV certificates on hardware tokens can't be used from GitHub-hosted runners; sign locally instead. |
-| 2 | **Licence agreement text** | The installer shows `LICENSE`, which is a placeholder | Approved EULA |
+| 1 | **Code-signing certificate** issued to HTREASURE LTD | Unsigned installers trigger SmartScreen "Unknown publisher" warnings | **Pipeline ready** for Azure Artifact Signing (recommended; UK organisations eligible) or an OV/EV certificate. HTREASURE LTD must apply. Step-by-step: CODE-SIGNING.md |
+| 2 | **Licence agreement text** | Shown by the installer and installed with the program | **Done (2026-11-20):** the HTREASURE LTD EULA from HT ISO Creator, adapted to HT ISO Ripper (personal, non-commercial use free; organisations need a separate licence; England and Wales law; adds a no-circumvention clause). Confirm with your legal adviser. |
 | 3 | **Support and website details** | Shown in Programs and Features and the installer | Values for `installer/branding.iss` |
 | 4 | **Redistribution of Microsoft .NET installers** | The offline installer bundles them | Legal confirmation, or drop the offline installer |
-| 5 | **Real-hardware and legacy-Windows validation** | Required before claiming compatibility | VMs and test drives (WINDOWS-TEST-MATRIX.md) |
+| 5 | **Real-hardware and legacy-Windows validation** | Required before claiming compatibility | **Partly automated:** scripts/test-installer-e2e.ps1 installs, starts, reinstalls and uninstalls for real; CI runs it on clean Windows Server 2022 for every push. Still needed: run it on Windows 7 SP1, 8, 8.1 and 10 PCs or VMs, plus imaging tests with a real CD/DVD drive (WINDOWS-TEST-MATRIX.md). |
 | 6 | **Update service** (optional) | "Check for updates" is not offered without one | Decide whether to provide an update URL |
 
 ## Signing pipeline (ready)

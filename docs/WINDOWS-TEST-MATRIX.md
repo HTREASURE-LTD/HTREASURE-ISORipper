@@ -2,6 +2,26 @@
 
 Record each run in `docs/release/RELEASE-TEST-REPORT.md`: date, tester, OS edition, build, architecture, result, Setup log.
 
+## Automated install test – run on every environment first
+
+`scripts/test-installer-e2e.ps1` really installs HT ISO Ripper, then checks:
+
+- registration in Programs and Features, the version, publisher and website;
+- every installed file, the documents and the licence;
+- that the right build (net48 or net461) and architecture were installed;
+- the Start Menu shortcut;
+- that the program starts and scans for drives.
+
+It then reinstalls in place and uninstalls, checking that nothing is left behind and that .NET is untouched. It works on PowerShell 2.0, so a stock Windows 7 SP1 can run it. CI runs it on a clean Windows Server 2022 machine for every push.
+
+From an elevated PowerShell on the test PC or VM, with the Setup file copied next to the script:
+
+```bash
+powershell -ExecutionPolicy Bypass -File test-installer-e2e.ps1 -Setup HT-ISO-Ripper-Setup-1.0.0.exe
+```
+
+Add `-Interactive` to click through the real wizard instead, which is needed when .NET is missing: silent installs never download it. Attach the generated `HTISORipper-e2e-report.txt` to RELEASE-TEST-REPORT.md.
+
 ## Environments to prepare (VM snapshots)
 
 | Id | OS | Arch | Starting state |
