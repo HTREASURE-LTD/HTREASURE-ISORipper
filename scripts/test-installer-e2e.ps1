@@ -98,7 +98,8 @@ $ver = [Version]$os.Version
 $isWin8 = ($ver.Major -eq 6 -and $ver.Minor -eq 2 -and $os.ProductType -eq 1)
 if ($isWin8) { $expectedSku = 'v4.6.1'; $needed = 394254 } else { $expectedSku = 'v4.8'; $needed = 528040 }
 # Setup's own product version (for example 1.0.1) is what Programs and Features must show.
-$expectedVersion = (Get-Item $Setup).VersionInfo.ProductVersion
+# (Inno Setup pads the version resource string, so trim spaces and NULs.)
+$expectedVersion = ([string](Get-Item $Setup).VersionInfo.ProductVersion).Trim([char[]]@([char]0, ' '))
 
 $header = @(
     'HT ISO Ripper - end-to-end installer test',
